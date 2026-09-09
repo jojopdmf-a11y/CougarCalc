@@ -1,0 +1,23 @@
+# CougarCalc.com site — Cloudflare Worker + static assets (MemoryMap pattern).
+# Custom domains intentionally commented until DNS go-ahead.
+
+name = "cougarcalc"
+main = "./worker.ts"
+compatibility_date = "2026-09-09"
+
+# [[routes]]
+# pattern = "cougarcalc.com"
+# custom_domain = true
+#
+# [[routes]]
+# pattern = "www.cougarcalc.com"
+# custom_domain = true
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+html_handling = "auto-trailing-slash"
+not_found_handling = "single-page-application"
+
+[observability]
+enabled = true

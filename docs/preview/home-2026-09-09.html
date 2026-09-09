@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CougarCalc.com — homepage preview</title>
+<style>
+  :root{
+    --bg:#0B0E14; --panel:#0a1622; --panel2:#111827; --line:#1e3a4a;
+    --cyan:#00D8FF; --cyan2:#22d3ee; --lime:#B6FF3B; --text:#E8EEF5; --muted:#8BA0B5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
+  a{color:var(--cyan2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid #15202b}
+  .logo{font-weight:800;letter-spacing:-.02em}.logo span{color:var(--cyan2)}
+  nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+  nav a{color:var(--muted)} nav a:hover{color:var(--text)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;border:1px solid transparent;cursor:pointer}
+  .btn-primary{background:var(--cyan2);color:#041018;border-color:var(--cyan2)}
+  .btn-ghost{background:transparent;color:var(--text);border-color:#2a4558}
+  .btn-outline{background:transparent;color:var(--cyan2);border-color:var(--cyan2)}
+  .hero{display:grid;grid-template-columns:1.05fr 1fr;gap:36px;align-items:center;padding:56px 0 40px}
+  @media (max-width:900px){.hero{grid-template-columns:1fr}}
+  h1{font-size:clamp(2rem,4.5vw,3.2rem);line-height:1.05;margin:0 0 14px;letter-spacing:-.03em}
+  h1 em{font-style:normal;color:var(--cyan2)}
+  .sub{color:var(--muted);font-size:1.05rem;max-width:42ch;margin:0 0 22px}
+  .cta-row{display:flex;flex-wrap:wrap;gap:12px}
+  .stack{position:relative;min-height:320px}
+  .stack img{width:100%;border-radius:14px;border:1px solid var(--line);box-shadow:0 0 0 1px rgba(0,216,255,.15),0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(0,216,255,.12);background:#000}
+  .stack .a{transform:rotate(-2deg) translateY(8px)}
+  .stack .b{position:absolute;right:0;top:28%;width:72%;transform:rotate(1.5deg);z-index:2}
+  .stack .c{position:absolute;left:8%;bottom:-4%;width:68%;transform:rotate(-1deg);z-index:3}
+  .section-label{text-align:center;color:var(--cyan2);font-size:13px;letter-spacing:.18em;text-transform:uppercase;margin:10px 0 22px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-bottom:48px}
+  @media (max-width:900px){.cards{grid-template-columns:1fr}}
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 0 24px rgba(0,216,255,.06)}
+  .card img{width:100%;border-radius:10px;border:1px solid #1a2f3d;aspect-ratio:16/10;object-fit:cover;object-position:top;background:#000}
+  .card h3{margin:12px 0 4px;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+  .on{font-size:10px;font-weight:800;color:#0b1400;background:var(--lime);padding:2px 7px;border-radius:999px;letter-spacing:.04em}
+  .card p{margin:0 0 10px;color:var(--muted);font-size:14px}
+  .free{border-top:1px solid #15202b;padding:22px 0 40px}
+  .free h2{font-size:14px;color:var(--muted);font-weight:600;margin:0 0 12px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:12px;color:var(--muted);background:#0f1720;border:1px solid #1c2a36;padding:7px 11px;border-radius:999px}
+  .note{margin-top:14px;font-size:12px;color:#5f7388}
+  .banner{background:#081018;border-bottom:1px solid #15202b;color:var(--muted);font-size:12px;padding:8px 0;text-align:center}
+</style>
+</head>
+<body>
+<div class="banner">PREVIEW — not live. Star / kill the direction. Assets from your three Mac apps.</div>
+<div class="wrap">
+  <header>
+    <div class="logo">Cougar<span>Calc</span>.com</div>
+    <nav>
+      <a href="#apps">Apps</a>
+      <a href="#free">Free Tools</a>
+      <a href="#free">Guitar</a>
+      <a href="#free">Audio</a>
+      <a href="#">About</a>
+    </nav>
+    <a class="btn btn-outline" href="#apps">Buy apps</a>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Podcast stems → <em>polish</em> → <em>loudness</em></h1>
+      <p class="sub">Three local Mac apps for podcast editors. Free calculators for guitar builders and live sound — traffic + convenience, not the brand story.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#apps">See the apps →</a>
+        <a class="btn btn-ghost" href="#free">Browse free tools</a>
+      </div>
+    </div>
+    <div class="stack" aria-hidden="true">
+      <img class="a" src="../assets/podcast-stripper.png" alt="Podcast Stripper"/>
+      <img class="b" src="../assets/fixer-mixer.png" alt="Fixer Mixer"/>
+      <img class="c" src="../assets/lil-leveler.png" alt="Lil Leveler"/>
+    </div>
+  </section>
+
+  <div class="section-label" id="apps">— The podcast desk —</div>
+  <section class="cards">
+    <article class="card">
+      <img src="../assets/podcast-stripper.png" alt="Podcast Stripper UI"/>
+      <h3>Podcast Stripper <span class="on">ON</span></h3>
+      <p>Stereo mix → speaker tracks + music. Local stems for the rest of the desk.</p>
+      <a href="#">Learn more →</a>
+    </article>
+    <article class="card">
+      <img src="../assets/fixer-mixer.png" alt="Fixer Mixer UI"/>
+      <h3>Fixer Mixer <span class="on">ON</span></h3>
+      <p>Stripper stems → balance, EQ, level → bounce a platform-ready mix.</p>
+      <a href="#">Learn more →</a>
+    </article>
+    <article class="card">
+      <img src="../assets/lil-leveler.png" alt="Lil Leveler UI"/>
+      <h3>Lil Leveler <span class="on">ON</span></h3>
+      <p>Final mix → platform loudness without crushing dynamics.</p>
+      <a href="#">Learn more →</a>
+    </article>
+  </section>
+
+  <section class="free" id="free">
+    <h2>Free tools · convenience / SEO</h2>
+    <div class="chips">
+      <span class="chip">Cable Loss</span>
+      <span class="chip">Ohm’s Law</span>
+      <span class="chip">Scale Length</span>
+      <span class="chip">Speaker EQ</span>
+      <span class="chip">Gain Staging</span>
+      <span class="chip">Delay Calc</span>
+      <span class="chip">Note Freq</span>
+      <span class="chip">Impedance</span>
+      <span class="chip">LUFS Diff</span>
+      <span class="chip">Tempo BPM</span>
+    </div>
+    <p class="note">Quick calculators. Always free. Always local. Chrome matches the apps (charcoal / cyan / lime ON) — not a second brand.</p>
+  </section>
+</div>
+</body>
+</html>
