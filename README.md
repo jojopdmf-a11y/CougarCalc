@@ -47,6 +47,14 @@ npm run deploy   # requires Cloudflare auth + wrangler
 | Lil Leveler | $15 |
 | Podcast Suite | $49 |
 
+## Paddle checkout (sandbox)
+
+See [docs/PADDLE-CHECKOUT.md](docs/PADDLE-CHECKOUT.md).
+
+- `/buy` overlay checkout for apps + MemoryMap credits
+- Per-app Buy buttons on product pages
+- Requires `.env.local` with `VITE_PADDLE_CLIENT_TOKEN`
+
 ## Free tools
 
 See [docs/FREE-TOOLS.md](docs/FREE-TOOLS.md). Needs Grokbot Calc pack handoff before real calculators land.

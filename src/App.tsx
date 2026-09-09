@@ -4,6 +4,8 @@ import { SiteHeader } from './components/SiteHeader'
 import { StubPage } from './components/StubPage'
 import { AppProductPage } from './pages/AppProductPage'
 import { AppsIndexPage } from './pages/AppsIndexPage'
+import { BuyPage } from './pages/BuyPage'
+import { BuySuccessPage } from './pages/BuySuccessPage'
 import { HomePage } from './pages/HomePage'
 import { ToolsStubPage } from './pages/ToolsStubPage'
 import './styles/global.css'
@@ -24,6 +26,7 @@ export default function App() {
                   name="Podcast Stripper"
                   blurb="Stereo mix → speaker tracks + music."
                   image="/apps/podcast-stripper.png"
+                  catalogKey="stripper"
                 />
               }
             />
@@ -34,6 +37,7 @@ export default function App() {
                   name="Fixer Mixer"
                   blurb="Stems → polish → bounce."
                   image="/apps/fixer-mixer.png"
+                  catalogKey="mixer"
                 />
               }
             />
@@ -44,6 +48,7 @@ export default function App() {
                   name="Lil Leveler"
                   blurb="Final mix → platform loudness."
                   image="/apps/lil-leveler.png"
+                  catalogKey="leveler"
                 />
               }
             />
@@ -100,17 +105,8 @@ export default function App() {
                 </StubPage>
               }
             />
-            <Route
-              path="/buy"
-              element={
-                <StubPage title="Buy apps">
-                  <p>
-                    Paddle checkout placeholder. Sandbox prices: Stripper $25, Mixer $25, Leveler
-                    $15, Suite $49.
-                  </p>
-                </StubPage>
-              }
-            />
+            <Route path="/buy" element={<BuyPage />} />
+            <Route path="/buy/success" element={<BuySuccessPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

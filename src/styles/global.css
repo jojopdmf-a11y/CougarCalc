@@ -147,3 +147,9 @@ button:focus-visible {
 .site-footer p {
   margin: 0 0 6px;
 }
+
+button:disabled,
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
