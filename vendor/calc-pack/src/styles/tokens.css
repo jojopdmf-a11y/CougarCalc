@@ -1,0 +1,62 @@
+/**
+ * CougarCalc tokens — apps + free tools, one system.
+ * Starred homepage direction 2026-09-09. Supersedes Phase 2 brass accent.
+ * Do not rename locked custom properties without UX.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Core */
+  --bg: #0B0E14;
+  --surface: #0A1622;
+  --surface-2: #111C2A;
+  --text: #E8EEF4;
+  --text-muted: #8B9BB0;
+  --border: #1E2A3A;
+
+  /* Brand accent — single neon */
+  --accent: #00D8FF;
+  --accent-soft: #22D3EE;
+  --accent-ink: #0B0E14;
+
+  /* Results win by size, not a second hue */
+  --result: #E8EEF4;
+
+  /* ON / Pass — lime only for active + pass fills */
+  --on: #B6FF3B;
+  --on-ink: #0B0E14;
+  --ok: #B6FF3B;
+  --ok-ink: #0B0E14;
+
+  /* Functional (not brand chrome) */
+  --warn-bg: #2A2210;
+  --warn-border: #F0B429;
+  --warn-text: #F6D9A0;
+  --irreversible-bg: #2A1212;
+  --irreversible-border: #E07070;
+  --irreversible-text: #F5C2C2;
+  --error: #FF6B6B;
+
+  /* Product glow — home/app cards only, never calc result cards */
+  --glow-cyan: 0 0 24px rgba(0, 216, 255, 0.35);
+  --glow-cyan-strong: 0 0 32px rgba(0, 216, 255, 0.55);
+
+  /* Fret print / export only */
+  --print-bg: #FFFFFF;
+  --print-text: #111111;
+  --print-rule: #111111;
+
+  /* Layout */
+  --radius: 4px;
+  --radius-lg: 8px;
+  --tool: 40rem;
+  --page: 64rem;
+
+  /* Type */
+  --sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  /* Kickoff interim aliases */
+  --panel: var(--surface);
+  --muted: var(--text-muted);
+}

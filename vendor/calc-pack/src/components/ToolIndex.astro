@@ -1,0 +1,28 @@
+---
+import type { ToolEntry } from '../data/catalog.ts';
+
+type Props = { tools: ToolEntry[] };
+const { tools } = Astro.props;
+---
+
+<ul class="tool-index">
+	{
+		tools.map((tool) => (
+			<li>
+				{tool.built ? (
+					<a href={tool.href}>
+						<span class="title">{tool.title}</span>
+						<p class="one-liner">{tool.summary}</p>
+						<span class="muted-status">Live in this prototype</span>
+					</a>
+				) : (
+					<>
+						<span class="title">{tool.title}</span>
+						<p class="one-liner">{tool.summary}</p>
+						<span class="muted-status">not in this prototype</span>
+					</>
+				)}
+			</li>
+		))
+	}
+</ul>

@@ -1,0 +1,124 @@
+---
+import { DELAY_SAFETY } from '../site.ts';
+---
+
+<form id="speaker-delay-form" class="calc-stack" novalidate>
+	<div class="calc-panel">
+		<fieldset>
+			<legend>Two paths to the seat</legend>
+			<p class="hint">Acoustic path lengths to one seat. This is not cabinet spacing.</p>
+			<div class="field">
+				<label for="path-a">Path A</label>
+				<input id="path-a" name="pathA" type="text" inputmode="decimal" autocomplete="off" />
+			</div>
+			<div class="field">
+				<label for="path-b">Path B</label>
+				<input id="path-b" name="pathB" type="text" inputmode="decimal" autocomplete="off" />
+			</div>
+			<div class="field">
+				<label for="path-unit">Length unit</label>
+				<select id="path-unit" name="lengthUnit">
+					<option value="m" selected>m</option>
+					<option value="ft">ft</option>
+					<option value="in">in</option>
+				</select>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>Air</legend>
+			<div class="field-row">
+				<div class="field">
+					<label for="temperature">Temperature</label>
+					<input
+						id="temperature"
+						name="temperature"
+						type="text"
+						inputmode="decimal"
+						value="20"
+						autocomplete="off"
+					/>
+					<p class="hint">Default 20 °C / 68 °F. Not a reading.</p>
+				</div>
+				<div class="field">
+					<label for="temperature-unit">Unit</label>
+					<select id="temperature-unit" name="temperatureUnit">
+						<option value="C" selected>°C</option>
+						<option value="F">°F</option>
+					</select>
+				</div>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>Fill type and Haas extra</legend>
+			<div class="radios">
+				<label><input type="radio" name="fill-type" value="none" checked /> None</label>
+				<label><input type="radio" name="fill-type" value="front-fill" /> Front fill</label>
+				<label><input type="radio" name="fill-type" value="underbalcony" /> Underbalcony</label>
+				<label><input type="radio" name="fill-type" value="delay-tower" /> Delay tower</label>
+			</div>
+			<div class="field">
+				<label for="haas-ms">Haas extra (ms)</label>
+				<input id="haas-ms" name="haasMs" type="text" inputmode="decimal" value="0" autocomplete="off" />
+				<p class="hint">
+					Starting offset, not a law. Suggestions: none 0, front fill 8, underbalcony 10, delay tower 15.
+					Cited practice ranges: QSC 10–20 ms; SonaVyx front 5–10 ms, towers 10–20 ms.
+				</p>
+			</div>
+		</fieldset>
+
+		<details class="drawer">
+			<summary>Existing latency (empty = 0 ms)</summary>
+			<div class="field">
+				<label for="latency-a">Path A latency (ms)</label>
+				<input id="latency-a" name="latencyA" type="text" inputmode="decimal" autocomplete="off" />
+			</div>
+			<div class="field">
+				<label for="latency-b">Path B latency (ms)</label>
+				<input id="latency-b" name="latencyB" type="text" inputmode="decimal" autocomplete="off" />
+			</div>
+			<p class="hint">DSP, network, and speaker processing already on that channel.</p>
+		</details>
+
+		<div class="field">
+			<label for="sample-rate">Sample rate</label>
+			<select id="sample-rate" name="sampleRate">
+				<option value="44100">44.1 kHz</option>
+				<option value="48000" selected>48 kHz</option>
+				<option value="96000">96 kHz</option>
+			</select>
+		</div>
+
+		<details class="drawer">
+			<summary>Speed of sound c (read-only)</summary>
+			<p class="mono" data-c-value>Enter paths and temperature to see c.</p>
+			<p class="hint">c = 331.3 + 0.6 × T_C m/s (Sengpiel simplified). Humidity is ignored. No slider.</p>
+		</details>
+
+		<div class="errors" data-errors hidden role="alert">
+			<p>Check these inputs</p>
+			<ul data-error-list></ul>
+		</div>
+	</div>
+
+	<section class="result-card" aria-live="polite">
+		<p class="result-eyebrow">Result</p>
+		<p class="result-value" data-delay-ms>—</p>
+		<p class="result-decision" data-decision>Enter both paths</p>
+		<ul class="result-extras" data-extras></ul>
+		<div class="actions">
+			<button class="btn-primary" type="button" data-copy disabled>Copy result</button>
+			<button class="btn-secondary" type="reset" data-reset>Reset</button>
+		</div>
+		<p class="copy-status" data-copy-status hidden></p>
+		<p class="safety safety-warn">{DELAY_SAFETY}</p>
+	</section>
+</form>
+
+<script>
+	import { bindSpeakerDelayForm } from '../islands/speaker-delay-ui.ts';
+
+	const form = document.querySelector<HTMLFormElement>('#speaker-delay-form');
+	if (form) bindSpeakerDelayForm(form);
+</script>

@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolIndex from '../../components/ToolIndex.astro';
+import { AUDIO_CATEGORY, AUDIO_TOOLS } from '../../data/catalog.ts';
+---
+
+<BaseLayout
+	title={`${AUDIO_CATEGORY.title} calculators`}
+	description="Live-sound calculator stubs for CougarCalc Phase 2. Speaker delay / time-alignment is the one live tool in this category."
+>
+	<div class="tool-col">
+		<Breadcrumbs
+			items={[
+				{ href: '/', label: 'Home' },
+				{ href: AUDIO_CATEGORY.href, label: AUDIO_CATEGORY.title },
+			]}
+		/>
+		<p class="kicker">Category</p>
+		<h1>{AUDIO_CATEGORY.title}</h1>
+		<p class="lede">{AUDIO_CATEGORY.summary}</p>
+		<p class="prose">12 / 12 tools · 1 live in this prototype.</p>
+		<ToolIndex tools={AUDIO_TOOLS} />
+	</div>
+</BaseLayout>
