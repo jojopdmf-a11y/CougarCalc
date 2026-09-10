@@ -6,9 +6,14 @@ import { AppProductPage } from './pages/AppProductPage'
 import { AppsIndexPage } from './pages/AppsIndexPage'
 import { BuyPage } from './pages/BuyPage'
 import { BuySuccessPage } from './pages/BuySuccessPage'
+import { FretPositionPage } from './pages/FretPositionPage'
 import { HomePage } from './pages/HomePage'
+import { SpeakerDelayPage } from './pages/SpeakerDelayPage'
+import { ToolCategoryPage } from './pages/ToolCategoryPage'
+import { ToolsIndexPage } from './pages/ToolsIndexPage'
 import { ToolsStubPage } from './pages/ToolsStubPage'
 import './styles/global.css'
+import './styles/tools.css'
 
 export default function App() {
   return (
@@ -52,48 +57,26 @@ export default function App() {
                 />
               }
             />
-            <Route
-              path="/tools"
-              element={
-                <ToolsStubPage
-                  title="Free tools"
-                  note="Indexes for audio/live sound and guitar building land here."
-                />
-              }
-            />
-            <Route
-              path="/audio-live-sound"
-              element={
-                <ToolsStubPage
-                  title="Audio / live sound"
-                  note="Route prefix locked. Calculators arrive when Calc pack is connected."
-                />
-              }
-            />
+            <Route path="/tools" element={<ToolsIndexPage />} />
+            <Route path="/audio-live-sound" element={<ToolCategoryPage kind="audio" />} />
+            <Route path="/audio-live-sound/speaker-delay" element={<SpeakerDelayPage />} />
             <Route
               path="/audio-live-sound/*"
               element={
                 <ToolsStubPage
                   title="Audio tool"
-                  note="Individual calculator stub — waiting on Grokbot free-tools handoff."
+                  note="This calculator is named in the catalog but not ported yet. Remaining tools stay on Origin."
                 />
               }
             />
-            <Route
-              path="/guitar-building"
-              element={
-                <ToolsStubPage
-                  title="Guitar building"
-                  note="Route prefix locked. Calculators arrive when Calc pack is connected."
-                />
-              }
-            />
+            <Route path="/guitar-building" element={<ToolCategoryPage kind="guitar" />} />
+            <Route path="/guitar-building/fret-position-calculator" element={<FretPositionPage />} />
             <Route
               path="/guitar-building/*"
               element={
                 <ToolsStubPage
                   title="Guitar tool"
-                  note="Individual calculator stub — waiting on Grokbot free-tools handoff."
+                  note="This calculator is named in the catalog but not ported yet. Remaining tools stay on Origin."
                 />
               }
             />

@@ -57,7 +57,11 @@ See [docs/PADDLE-CHECKOUT.md](docs/PADDLE-CHECKOUT.md).
 
 ## Free tools
 
-See [docs/FREE-TOOLS.md](docs/FREE-TOOLS.md). Needs Grokbot Calc pack handoff before real calculators land.
+See [docs/FREE-TOOLS.md](docs/FREE-TOOLS.md).
+
+- `/audio-live-sound/speaker-delay` — speaker delay (lock: 30 m / 20 m / 20 °C → 29.1 ms, Delay path B)
+- `/guitar-building/fret-position-calculator` — fret positions (lock: 25.500 in → d(12) = 12.750, Pass)
+- Remaining catalog names stay muted until later Origin ports
 
 ## Next build pass
 
