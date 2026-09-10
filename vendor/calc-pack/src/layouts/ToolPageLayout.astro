@@ -1,0 +1,40 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+type Crumb = { href: string; label: string };
+
+type Props = {
+	title: string;
+	description: string;
+	kicker: string;
+	lede: string;
+	warning: string;
+	warningKind: 'warn' | 'irreversible';
+	crumbs: Crumb[];
+	fretPrint?: boolean;
+};
+
+const { title, description, kicker, lede, warning, warningKind, crumbs, fretPrint = false } = Astro.props;
+const warningClass = warningKind === 'irreversible' ? 'safety safety-irreversible' : 'safety safety-warn';
+---
+
+<BaseLayout title={title} description={description} fretPrint={fretPrint}>
+	<article class="tool-col">
+		<Breadcrumbs items={crumbs} />
+		<p class="kicker">{kicker}</p>
+		<h1>{title}</h1>
+		<p class="lede">{lede}</p>
+		<p class={warningClass}>{warning}</p>
+		<slot name="calculator" />
+		<slot name="meaning" />
+		<slot name="formula" />
+		<slot name="example" />
+		<slot name="assumptions" />
+		<slot name="notes" />
+		<slot name="faqs" />
+		<slot name="related" />
+		<slot name="sources" />
+		<slot name="disclaimer" />
+	</article>
+</BaseLayout>

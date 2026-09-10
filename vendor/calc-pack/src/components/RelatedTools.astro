@@ -1,0 +1,28 @@
+---
+import type { ToolEntry } from '../data/catalog.ts';
+
+type Props = {
+	tools: ToolEntry[];
+	intro: string;
+};
+
+const { tools, intro } = Astro.props;
+---
+
+<section id="related-tools">
+	<h2>Related tools</h2>
+	<p class="prose">{intro}</p>
+	<ul class="related">
+		{
+			tools.map((tool) => (
+				<li>
+					<a href={tool.href}>
+						<strong>{tool.title}</strong>
+						{tool.summary}
+						<span class="status">{tool.built ? 'Built in this prototype' : 'Not built yet — opens the category page'}</span>
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</section>

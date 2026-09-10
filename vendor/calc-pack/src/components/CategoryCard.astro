@@ -1,0 +1,19 @@
+---
+import type { ToolEntry } from '../data/catalog.ts';
+
+type Props = {
+	href: string;
+	title: string;
+	summary: string;
+	meta: string;
+	tools?: ToolEntry[];
+};
+
+const { href, title, summary, meta } = Astro.props;
+---
+
+<a class="category-card" href={href}>
+	<p class="card-meta">{meta}</p>
+	<h2>{title}</h2>
+	<p>{summary}</p>
+</a>

@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ToolIndex from '../../components/ToolIndex.astro';
+import { GUITAR_CATEGORY, GUITAR_TOOLS } from '../../data/catalog.ts';
+---
+
+<BaseLayout
+	title={`${GUITAR_CATEGORY.title} calculators`}
+	description="Guitar-building calculator stubs for CougarCalc Phase 2. Fret position is the one live tool in this category."
+>
+	<div class="tool-col">
+		<Breadcrumbs
+			items={[
+				{ href: '/', label: 'Home' },
+				{ href: GUITAR_CATEGORY.href, label: GUITAR_CATEGORY.title },
+			]}
+		/>
+		<p class="kicker">Category</p>
+		<h1>{GUITAR_CATEGORY.title}</h1>
+		<p class="lede">{GUITAR_CATEGORY.summary}</p>
+		<p class="prose">12 / 12 tools · 1 live in this prototype.</p>
+		<ToolIndex tools={GUITAR_TOOLS} />
+	</div>
+</BaseLayout>

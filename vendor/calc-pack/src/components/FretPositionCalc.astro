@@ -1,0 +1,134 @@
+---
+import { FRET_IRREVERSIBLE } from '../site.ts';
+---
+
+<form id="fret-position-form" class="calc-stack" novalidate>
+	<div class="calc-panel">
+		<fieldset>
+			<legend>Scale length</legend>
+			<div class="field-row">
+				<div class="field">
+					<label for="scale-length">S</label>
+					<input id="scale-length" name="scale" type="text" inputmode="decimal" autocomplete="off" />
+				</div>
+				<div class="field">
+					<label for="scale-unit">Unit</label>
+					<select id="scale-unit" name="scaleUnit">
+						<option value="in" selected>in</option>
+						<option value="mm">mm</option>
+					</select>
+				</div>
+			</div>
+			<div class="chips" role="group" aria-label="Scale presets">
+				<button type="button" class="chip" data-scale-chip data-scale="25.5" data-unit="in" data-source="25.5-in">
+					25.500 in
+				</button>
+				<button type="button" class="chip" data-scale-chip data-scale="650" data-unit="mm" data-source="650-mm">
+					650 mm
+				</button>
+				<button type="button" class="chip" data-scale-chip data-scale="660" data-unit="mm" data-source="660-mm">
+					660 mm
+				</button>
+			</div>
+			<p class="hint" data-scale-source>
+				Chips cite published common scales. 650 mm is not 25.5 in (25.500 × 25.4 = 647.7 mm).
+			</p>
+		</fieldset>
+
+		<fieldset>
+			<legend>Fret count N</legend>
+			<div class="field">
+				<label for="fret-count">Frets</label>
+				<input id="fret-count" name="fretCount" type="text" inputmode="numeric" value="22" autocomplete="off" />
+				<p class="hint">Default 22.</p>
+			</div>
+			<div class="chips" role="group" aria-label="Fret count presets">
+				<button type="button" class="chip" data-n-chip data-n="19">19</button>
+				<button type="button" class="chip" data-n-chip data-n="21">21</button>
+				<button type="button" class="chip" data-n-chip data-n="22">22</button>
+				<button type="button" class="chip" data-n-chip data-n="24">24</button>
+			</div>
+		</fieldset>
+
+		<fieldset>
+			<legend>Datum</legend>
+			<div class="radios">
+				<label><input type="radio" name="datum" value="nut" checked /> Nut face</label>
+				<label>
+					<input type="radio" name="datum" value="zero-fret" disabled />
+					Zero fret (not in this prototype)
+				</label>
+			</div>
+			<p class="hint">Distances are from the nut face. Zero-fret datum shift is not implemented here.</p>
+		</fieldset>
+
+		<details class="drawer">
+			<summary>Kerf (empty = none)</summary>
+			<div class="field">
+				<label for="kerf">Saw kerf</label>
+				<input id="kerf" name="kerf" type="text" inputmode="decimal" autocomplete="off" />
+			</div>
+			<p class="hint">
+				No spec default. Slot center = d(n). This tool does not invent a universal kerf clearance.
+			</p>
+		</details>
+
+		<details class="drawer">
+			<summary>Fan / multi-scale</summary>
+			<p>Fan table not in this prototype. Parallel 12-TET only. SVG/DXF export is not in this prototype.</p>
+		</details>
+
+		<div class="errors" data-errors hidden role="alert">
+			<p>Check these inputs</p>
+			<ul data-error-list></ul>
+		</div>
+	</div>
+
+	<section class="result-card" aria-live="polite">
+		<p class="result-eyebrow">Result</p>
+		<p class="result-value" data-twelfth>—</p>
+		<p class="result-decision" data-decision>Enter a scale length</p>
+		<ul class="result-extras" data-extras></ul>
+		<div class="actions">
+			<button class="btn-primary" type="button" data-copy disabled>Copy result</button>
+			<button class="btn-secondary" type="button" data-copy-tsv disabled>Copy table TSV</button>
+			<button class="btn-secondary" type="reset" data-reset>Reset</button>
+		</div>
+		<p class="copy-status" data-copy-status hidden></p>
+		<p class="safety safety-irreversible">{FRET_IRREVERSIBLE}</p>
+	</section>
+
+	<div class="table-wrap">
+		<table>
+			<caption class="visually-hidden">Fret distances from the nut</caption>
+			<thead>
+				<tr>
+					<th scope="col">Fret</th>
+					<th scope="col">From nut</th>
+					<th scope="col">Fret to fret</th>
+				</tr>
+			</thead>
+			<tbody data-table-body></tbody>
+		</table>
+	</div>
+
+	<div class="print-preview">
+		<p class="print-warning">
+			Confirm nut, 12th, and last against a steel rule. Do not saw from an unscaled print.
+		</p>
+		<p class="hint print-only">Print uses white paper tokens. Printers are not CAM (Mottola).</p>
+		<p class="mono" data-print-scale></p>
+		<div class="scale-bars">
+			<div class="scale-bar scale-bar-100mm">100 mm</div>
+			<div class="scale-bar scale-bar-in">1 in</div>
+		</div>
+		<div class="fretboard" data-fretboard aria-hidden="true"></div>
+	</div>
+</form>
+
+<script>
+	import { bindFretPositionForm } from '../islands/fret-position-ui.ts';
+
+	const form = document.querySelector<HTMLFormElement>('#fret-position-form');
+	if (form) bindFretPositionForm(form);
+</script>

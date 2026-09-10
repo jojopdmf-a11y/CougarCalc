@@ -1,0 +1,72 @@
+---
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-600.css';
+import '@fontsource/ibm-plex-mono/latin-400.css';
+import '@fontsource/ibm-plex-mono/latin-500.css';
+import '../styles/global.css';
+import { FOOTER_LINES, SITE_NAME } from '../site.ts';
+
+type Props = {
+	title: string;
+	description: string;
+	ogType?: 'website' | 'article';
+	fretPrint?: boolean;
+};
+
+const { title, description, ogType = 'website', fretPrint = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const pageTitle = title.includes(SITE_NAME) ? title : `${title} — ${SITE_NAME}`;
+const path = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{pageTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<meta name="robots" content="noindex, nofollow" />
+		<meta property="og:type" content={ogType} />
+		<meta property="og:site_name" content={SITE_NAME} />
+		<meta property="og:title" content={pageTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={pageTitle} />
+		<meta name="twitter:description" content={description} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+	</head>
+	<body class={fretPrint ? 'is-fret-page' : undefined}>
+		<a class="skip-link" href="#content">Skip to content</a>
+		<header class="site-header">
+			<div class="wrap site-header-inner">
+				<a class="wordmark" href="/">CougarCalc</a>
+				<nav class="nav" aria-label="Primary">
+					<a
+						href="/audio-live-sound/"
+						aria-current={path.startsWith('/audio-live-sound/') ? 'page' : undefined}
+						>Audio / live sound</a
+					>
+					<a
+						href="/guitar-building/"
+						aria-current={path.startsWith('/guitar-building/') ? 'page' : undefined}
+						>Guitar building</a
+					>
+				</nav>
+			</div>
+		</header>
+		<main id="content">
+			<div class="wrap">
+				<slot />
+			</div>
+		</main>
+		<footer class="site-footer">
+			<div class="wrap">
+				{FOOTER_LINES.map((line) => <p>{line}</p>)}
+			</div>
+		</footer>
+	</body>
+</html>
