@@ -1,0 +1,10 @@
+{
+  "id": "fret-d12-25-5",
+  "scaleLengthIn": 25.5,
+  "fret": 12,
+  "temperament": "12-TET",
+  "expectedIn": 12.75,
+  "expectedDisplay": "12.750",
+  "gate": "Pass",
+  "notes": "Octave is half the scale. Print / export uses light tokens only."
+}
