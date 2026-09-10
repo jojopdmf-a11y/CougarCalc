@@ -12,6 +12,7 @@ import { SpeakerDelayPage } from './pages/SpeakerDelayPage'
 import { ToolCategoryPage } from './pages/ToolCategoryPage'
 import { ToolsIndexPage } from './pages/ToolsIndexPage'
 import { ToolsStubPage } from './pages/ToolsStubPage'
+import { APP_PREVIEWS } from './data/apps.ts'
 import './styles/global.css'
 import './styles/tools.css'
 
@@ -24,39 +25,20 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/apps" element={<AppsIndexPage />} />
-            <Route
-              path="/apps/podcast-stripper"
-              element={
-                <AppProductPage
-                  name="Podcast Stripper"
-                  blurb="Stereo mix → speaker tracks + music."
-                  image="/apps/podcast-stripper.png"
-                  catalogKey="stripper"
-                />
-              }
-            />
-            <Route
-              path="/apps/fixer-mixer"
-              element={
-                <AppProductPage
-                  name="Fixer Mixer"
-                  blurb="Stems → polish → bounce."
-                  image="/apps/fixer-mixer.png"
-                  catalogKey="mixer"
-                />
-              }
-            />
-            <Route
-              path="/apps/lil-leveler"
-              element={
-                <AppProductPage
-                  name="Lil Leveler"
-                  blurb="Final mix → platform loudness."
-                  image="/apps/lil-leveler.png"
-                  catalogKey="leveler"
-                />
-              }
-            />
+            {APP_PREVIEWS.map((app) => (
+              <Route
+                key={app.path}
+                path={app.path}
+                element={
+                  <AppProductPage
+                    name={app.name}
+                    blurb={app.blurb}
+                    image={app.image}
+                    catalogKey={app.catalogKey}
+                  />
+                }
+              />
+            ))}
             <Route path="/tools" element={<ToolsIndexPage />} />
             <Route path="/audio-live-sound" element={<ToolCategoryPage kind="audio" />} />
             <Route path="/audio-live-sound/speaker-delay" element={<SpeakerDelayPage />} />

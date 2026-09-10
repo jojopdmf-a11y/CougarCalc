@@ -24,15 +24,9 @@ export function AppProductPage({ name, blurb, image, catalogKey }: AppProductPag
         <p>Catalog item missing for {catalogKey}.</p>
       )}
       <img
+        className="app-preview-full"
         src={image}
-        alt={`${name} screenshot`}
-        style={{
-          width: 'min(100%, 720px)',
-          marginTop: 20,
-          borderRadius: 'var(--radius-lg)',
-          border: '1px solid var(--border)',
-          boxShadow: 'var(--glow-cyan)',
-        }}
+        alt={`${name} app window`}
       />
     </StubPage>
   )
