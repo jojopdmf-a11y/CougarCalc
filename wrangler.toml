@@ -1,9 +1,12 @@
 # CougarCalc.com site — Cloudflare Worker + static assets (MemoryMap pattern).
-# Custom domains intentionally commented until DNS go-ahead.
+# Custom domains stay commented until DNS go-ahead.
+# Staging: `npm run deploy` → workers.dev only. Production: `npm run deploy:production`.
 
 name = "cougarcalc"
+account_id = "d7cbc700dc3f0f8894ffdbbbb0934f4a"
 main = "./worker.ts"
 compatibility_date = "2026-09-09"
+workers_dev = true
 
 # [[routes]]
 # pattern = "cougarcalc.com"
@@ -21,3 +24,11 @@ not_found_handling = "single-page-application"
 
 [observability]
 enabled = true
+
+# Bookmarkable preview. No custom domain.
+[env.staging]
+name = "cougarcalc-staging"
+workers_dev = true
+
+[env.staging.vars]
+ENVIRONMENT = "staging"

@@ -17,8 +17,11 @@ Build / deploy:
 
 ```bash
 npm run build
-npm run deploy   # requires Cloudflare auth + wrangler
+npm run deploy              # staging on workers.dev (bookmark this)
+npm run deploy:production   # production Worker — wait for DNS go-ahead
 ```
+
+See [docs/STAGING.md](docs/STAGING.md) for the preview URL and how updates show up.
 
 ## Design pack (from Grokbot)
 
@@ -68,4 +71,4 @@ See [docs/FREE-TOOLS.md](docs/FREE-TOOLS.md).
 1. Implement homepage from kickoff + preview HTML.
 2. Product pages with buy CTAs.
 3. Connect free-tools pack under locked path prefixes.
-4. Staging deploy, then DNS when green-lit.
+4. Staging deploy on workers.dev, then DNS when green-lit. See [docs/STAGING.md](docs/STAGING.md).
