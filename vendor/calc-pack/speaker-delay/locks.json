@@ -1,0 +1,10 @@
+{
+  "id": "speaker-delay-path-b",
+  "label": "Delay path B",
+  "pathA_m": 0,
+  "pathB_m": 10,
+  "tempC": 20,
+  "expectedMs": 29.1,
+  "expectedDisplay": "29.1 ms",
+  "notes": "10.00 m path B at 20 °C using 331.3 + 0.606×T. Format one decimal."
+}

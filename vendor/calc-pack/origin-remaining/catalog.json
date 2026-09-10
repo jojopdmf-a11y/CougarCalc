@@ -1,0 +1,30 @@
+{
+  "remaining": 22,
+  "note": "Sources stay on Origin until the full calc-pack zip is attached.",
+  "audio_live_sound": [
+    { "slug": "cardioid-sub-array", "sitePath": "/audio-live-sound/cardioid-sub-array" },
+    { "slug": "show-latency", "sitePath": "/audio-live-sound/show-latency" },
+    { "slug": "sub-main-crossover-delay", "sitePath": "/audio-live-sound/sub-main-crossover-delay" },
+    { "slug": "max-spl", "sitePath": "/audio-live-sound/max-spl" },
+    { "slug": "cable-loss", "sitePath": "/audio-live-sound/cable-loss" },
+    { "slug": "ohms-law", "sitePath": "/audio-live-sound/ohms-law" },
+    { "slug": "speaker-eq", "sitePath": "/audio-live-sound/speaker-eq" },
+    { "slug": "gain-staging", "sitePath": "/audio-live-sound/gain-staging" },
+    { "slug": "impedance", "sitePath": "/audio-live-sound/impedance" },
+    { "slug": "note-freq", "sitePath": "/audio-live-sound/note-freq" },
+    { "slug": "lufs-diff", "sitePath": "/audio-live-sound/lufs-diff" }
+  ],
+  "guitar_building": [
+    { "slug": "scale-length-compare", "sitePath": "/guitar-building/scale-length-compare" },
+    { "slug": "saddle-compensation", "sitePath": "/guitar-building/saddle-compensation" },
+    { "slug": "bridge-placement", "sitePath": "/guitar-building/bridge-placement" },
+    { "slug": "string-tension-calculator", "sitePath": "/guitar-building/string-tension-calculator" },
+    { "slug": "string-set-tension", "sitePath": "/guitar-building/string-set-tension" },
+    { "slug": "nut-spacing-slot-width", "sitePath": "/guitar-building/nut-spacing-slot-width" },
+    { "slug": "nut-height-first-fret", "sitePath": "/guitar-building/nut-height-first-fret" },
+    { "slug": "action-worksheet", "sitePath": "/guitar-building/action-worksheet" },
+    { "slug": "fretboard-radius-sagitta", "sitePath": "/guitar-building/fretboard-radius-sagitta" },
+    { "slug": "neck-taper-width", "sitePath": "/guitar-building/neck-taper-width" },
+    { "slug": "pickup-pole-spacing", "sitePath": "/guitar-building/pickup-pole-spacing" }
+  ]
+}
