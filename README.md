@@ -51,7 +51,7 @@ npm run deploy   # requires Cloudflare auth + wrangler
 
 See [docs/PADDLE-CHECKOUT.md](docs/PADDLE-CHECKOUT.md).
 
-- `/buy` overlay checkout for apps + MemoryMap credits
+- `/buy` overlay checkout for CougarCalc apps (MemoryMap credits live on the MemoryMap site)
 - Per-app Buy buttons on product pages
 - Requires `.env.local` with `VITE_PADDLE_CLIENT_TOKEN`
 

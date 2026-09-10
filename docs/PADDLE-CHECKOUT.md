@@ -2,9 +2,11 @@
 
 Overlay checkout is wired on:
 
-- `/buy` — all CougarCalc + MemoryMap products
+- `/buy` — CougarCalc apps only
 - `/apps/podcast-stripper`, `/apps/fixer-mixer`, `/apps/lil-leveler` — per-app Buy buttons
 - `/buy/success` — post-checkout thank-you page (UX only)
+
+CougarCalc and MemoryMap are separate sites. They share one CougarCorp Paddle seller account (catalog, webhooks, client tokens). MemoryMap credit products stay in that account; they are not sold on this site.
 
 ## Env
 
@@ -28,5 +30,17 @@ Client token for this project: created as **CougarCalc site sandbox** in Paddle 
 
 ## Still TODO
 
-- Webhooks to grant licenses / MemoryMap credits (do not trust the success page alone)
+- Webhooks to grant CougarCalc licenses (do not trust the success page alone)
 - Live catalog + live client token when taking real money
+
+## MemoryMap (same Paddle account, different site)
+
+Credit products already exist in this sandbox catalog. Sell them from the MemoryMap repo, not here:
+
+| Product | USD | Price ID | Product ID |
+| --- | --- | --- | --- |
+| MemoryMap — 10 Credits | $10 | `pri_01m246sabkepwkqnnypmyger43` | `pro_01m246sa9x3xapjh1djp2qnpmt` |
+| MemoryMap — 3 Credits | $5 | `pri_01m246sa48c91anzhcm7easdf3` | `pro_01m246sa2cdyqv0q68xc90gh05` |
+| MemoryMap — 1 Credit | $2 | `pri_01m246s9w36dtncatd7y2hy98w` | `pro_01m246s9t9npapktyyzj5keb4j` |
+
+Paddle’s “build your pricing page and checkout” step is frontend work on each site: initialize Paddle.js with a client-side token, pass those price IDs, open overlay checkout. Optionally create a second client token named for MemoryMap (Paddle allows many). Add MemoryMap domains under **Checkout → Website approval** when leaving localhost.

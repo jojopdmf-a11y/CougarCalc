@@ -1,6 +1,6 @@
 import { BuyButton } from '../components/BuyButton'
 import { StubPage } from '../components/StubPage'
-import { COUGARCALC_PRODUCTS, MEMORYMAP_PRODUCTS } from '../lib/catalog'
+import { CATALOG } from '../lib/catalog'
 
 function ProductRow({
   name,
@@ -41,10 +41,9 @@ function ProductRow({
 }
 
 export function BuyPage() {
-  // Stable display order for CougarCalc
   const order = ['stripper', 'mixer', 'leveler', 'suite']
-  const cougar = order
-    .map((key) => COUGARCALC_PRODUCTS.find((p) => p.key === key))
+  const products = order
+    .map((key) => CATALOG.find((p) => p.key === key))
     .filter(Boolean)
 
   return (
@@ -54,9 +53,8 @@ export function BuyPage() {
         success page — license delivery via webhook comes next.
       </p>
 
-      <h2 style={{ marginTop: 28, marginBottom: 12, fontSize: '1.1rem' }}>CougarCalc</h2>
-      <div style={{ display: 'grid', gap: 12 }}>
-        {cougar.map((item) => (
+      <div style={{ display: 'grid', gap: 12, marginTop: 28 }}>
+        {products.map((item) => (
           <ProductRow
             key={item!.key}
             name={item!.name}
@@ -64,14 +62,6 @@ export function BuyPage() {
             priceId={item!.priceId}
             note={item!.key === 'suite' ? 'all three apps' : undefined}
           />
-        ))}
-      </div>
-
-      <h2 style={{ marginTop: 36, marginBottom: 12, fontSize: '1.1rem' }}>MemoryMap credits</h2>
-      <p style={{ marginTop: 0 }}>Same Paddle sandbox account — handy for testing both catalogs.</p>
-      <div style={{ display: 'grid', gap: 12 }}>
-        {MEMORYMAP_PRODUCTS.map((item) => (
-          <ProductRow key={item.key} name={item.name} usd={item.usd} priceId={item.priceId} />
         ))}
       </div>
     </StubPage>
