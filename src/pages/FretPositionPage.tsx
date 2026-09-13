@@ -1,0 +1,160 @@
+import {
+  computeFretPositions,
+  formatFretCopy,
+  formatScaleDisplay,
+  tetDistanceFromNut,
+} from '../calc/fret-position.ts'
+import { CalcShell } from '../components/tools/CalcShell.tsx'
+import { FretPositionCalc } from '../components/tools/FretPositionCalc.tsx'
+import { RelatedTools } from '../components/tools/RelatedTools.tsx'
+import { AUDIO_TOOLS, GUITAR_CATEGORY, GUITAR_TOOLS } from '../data/catalog.ts'
+import { FRET_IRREVERSIBLE, FRET_LEDE, LAST_REVIEWED_LABEL } from '../data/toolCopy.ts'
+
+const example = computeFretPositions({
+  scale: 25.5,
+  scaleUnit: 'in',
+  fretCount: 22,
+})
+if (!example.ok) {
+  throw new Error('Fret worked example failed to compute')
+}
+const exampleOk = example
+const d1 = tetDistanceFromNut(25.5, 1)
+const d5 = tetDistanceFromNut(25.5, 5)
+const d7 = tetDistanceFromNut(25.5, 7)
+const related = [...GUITAR_TOOLS.filter((t) => t.slug !== 'fret-position-calculator'), AUDIO_TOOLS[0]]
+
+export function FretPositionPage() {
+  return (
+    <CalcShell
+      title="Fret position calculator"
+      kicker="Guitar building"
+      lede={FRET_LEDE}
+      warning={FRET_IRREVERSIBLE}
+      warningKind="irreversible"
+      crumbs={[
+        { to: '/', label: 'Home' },
+        { to: GUITAR_CATEGORY.href, label: GUITAR_CATEGORY.title },
+        { to: '/guitar-building/fret-position-calculator', label: 'Fret position' },
+      ]}
+      calculator={<FretPositionCalc />}
+      meaning={
+        <section className="prose">
+          <h2>What the result means</h2>
+          <p>
+            The large number is d(12), the nut-to-twelfth-fret distance. In 12-TET it must equal S/2. The table lists
+            every fret from the nut (primary) and the consecutive fret-to-fret gaps. These are slot centers, not a
+            finished guitar and not a kerf clearance. Pass / Check failed is a real-arithmetic identity check, not
+            intonation.
+          </p>
+        </section>
+      }
+      formula={
+        <section className="prose">
+          <h2>Formula / method</h2>
+          <p>12-TET only, measured from the nut face:</p>
+          <p className="formula">
+            d(n) = S × (1 − 1 / 2<sup>n/12</sup>)
+          </p>
+          <p className="formula">d(12) = S/2 exactly</p>
+          <p>
+            1 in = 25.4 mm is a conversion, not a maker spec. 650 mm is not 25.5 in: 25.500 × 25.4 = 647.7 mm.
+            Intermediates are float64 and are not rounded. Display uses three decimal inches or two decimal millimetres.
+            Fan, SVG, and DXF are not in this prototype. Zero-fret datum is visible and disabled.
+          </p>
+        </section>
+      }
+      example={
+        <section className="prose">
+          <h2>Worked example</h2>
+          <div className="example-box">
+            <p>
+              S = 25.500 in, N = 22 (default). d(12) = 25.500 × (1 − 1/2) = <strong>12.750 in</strong>. Twelfth-fret
+              check: <strong>Pass</strong>.
+            </p>
+            <p>
+              Other nut distances from the same formula (display is three decimal inches): d(1) ={' '}
+              <span className="mono">{d1}</span> → {formatScaleDisplay(d1, 'in')} in; d(5) ={' '}
+              <span className="mono">{d5}</span> → {formatScaleDisplay(d5, 'in')} in; d(7) ={' '}
+              <span className="mono">{d7}</span> → {formatScaleDisplay(d7, 'in')} in.
+            </p>
+            <p className="mono">{formatFretCopy(exampleOk)}</p>
+          </div>
+        </section>
+      }
+      assumptions={
+        <section className="prose">
+          <h2>Assumptions and limitations</h2>
+          <ul>
+            <li>Theoretical 12-TET locations on a straight, parallel-fret board.</li>
+            <li>No compensation, no string stretch, no relief, no nut-slot height.</li>
+            <li>Kerf is recorded if you type it; it does not shift d(n).</li>
+            <li>Zero-fret instruments need a datum shift this prototype does not do.</li>
+            <li>Fan fretboards are not calculated here.</li>
+          </ul>
+        </section>
+      }
+      notes={
+        <section className="prose">
+          <h2>Practical notes</h2>
+          <ul>
+            <li>Verify the 12th fret equals half the scale before you saw. Sawing is irreversible.</li>
+            <li>Printers are not CAM. Confirm nut, 12th, and last against a steel rule.</li>
+            <li>Do not saw from an unscaled print. Use the scale bars on the print preview.</li>
+            <li>A 650 mm board is not a 25.500 in board. Pick the chip that matches what you measured.</li>
+          </ul>
+        </section>
+      }
+      faqs={
+        <section className="prose">
+          <h2>FAQs</h2>
+          <h3>Why doesn’t the 12th fret match on a finished guitar?</h3>
+          <p>Intonation, string height, and compensation move sounding pitches. This table is layout geometry, not a setup.</p>
+          <h3>Do I subtract the saw kerf?</h3>
+          <p>
+            Not here. Slot center = d(n). There is no universal clearance. If your shop has a kerf rule, apply it
+            yourself after you print the centers.
+          </p>
+          <h3>Is 650 mm the same as 25.5 in?</h3>
+          <p>No. 25.500 × 25.4 = 647.7 mm.</p>
+          <h3>Can I print this and glue it to the board?</h3>
+          <p>
+            Only after you confirm the scale bars against a steel rule. Mottola’s warning stands: printers are not CAM.
+          </p>
+          <h3>Where is the zero-fret option?</h3>
+          <p>Visible and disabled. Shifting the nut-face formula to a zero-fret datum is not in this prototype.</p>
+        </section>
+      }
+      related={
+        <RelatedTools
+          tools={related}
+          intro="Eleven more guitar-building tools are named for the full catalog. They are not built in this prototype. Speaker delay is live under Audio / live sound."
+        />
+      }
+      sources={
+        <section className="prose sources">
+          <h2>Sources</h2>
+          <p>Last reviewed {LAST_REVIEWED_LABEL}.</p>
+          <ul>
+            <li>
+              <a href="https://www.liutaiomottola.com/formulae/fret.htm">Mottola — fret formulae</a>
+            </li>
+            <li>
+              <a href="https://en.wikipedia.org/wiki/Fret">Wikipedia — Fret</a>
+            </li>
+          </ul>
+          <p>StewMac is cited only for the published 25.5 in Fender-style scale figure. This page does not copy StewMac’s UI.</p>
+        </section>
+      }
+      disclaimer={
+        <section className="disclaimer">
+          <h2>Disclaimer</h2>
+          <p>
+            Theoretical 12-TET locations, not finished intonation. Verify the 12th fret equals half the scale (S/2)
+            before you saw. Sawing is irreversible. Printers are not CAM. CougarCalc is a Phase 2 prototype.
+          </p>
+        </section>
+      }
+    />
+  )
+}

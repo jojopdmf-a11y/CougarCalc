@@ -1,32 +1,27 @@
-# Free tools connection (pending)
+# Free tools
 
 CougarCalc.com has two lanes:
 
 1. **Paid Mac apps** (this repo’s marketing centerpiece)
 2. **Free calculators** under `/audio-live-sound/` and `/guitar-building/`
 
-Grokbot / the Calc team already built free-tool formulas and a 14-section calc chrome. Those are **not** in this repo yet.
+Drop pack: `vendor/calc-pack/`. Ported into the live site; do not treat the drop folder as production.
 
-## What we need from Grokbot
+## Live now
 
-- Repo or export of live free tools (speaker-delay, fret-position, etc.)
-- Locked **14-section** calc page order + safety visibility rules
-- Any existing path map so we keep prefixes (`/audio-live-sound/*`, `/guitar-building/*`)
-- Confirmation whether tools ship as:
-  - ported React components into this Vite app, or
-  - a submodule / package this site imports
+| Route | Tool | Lock |
+| --- | --- | --- |
+| `/audio-live-sound/speaker-delay` | Speaker delay | Path A 30 m, Path B 20 m, 20 °C, Haas 0 → **29.1 ms**, Delay path B |
+| `/guitar-building/fret-position-calculator` | Fret position | Scale 25.500 in, 12-TET → **d(12) = 12.750**, Pass |
 
-## Placeholder routes already stubbed
+Formulas live in `src/calc/` (copied from the pack). Tests: `npm test`.
 
-- `/tools`
-- `/audio-live-sound` (+ `/*`)
-- `/guitar-building` (+ `/*`)
+## Remaining tools
 
-## When connecting
+Named on the category indexes, muted until ported. Formula sets stay on Origin (see `vendor/calc-pack/README.md`).
 
-1. Drop or import the Calc pack.
-2. Build shared `CalcShell` chrome using `src/styles/tokens.css` (apps cyan, not Phase 2 brass).
-3. Port proof tools first: `speaker-delay`, `fret-position`.
-4. Fill indexes; keep stubs muted (no fake CTAs).
+## Chrome
 
-Until then, stubs remind us not to invent calculator math.
+- 14-section tool page order in `CalcShell`
+- Safety under the lede **and** on the result card
+- Apps cyan tokens; no product glow on calc result cards

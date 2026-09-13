@@ -17,8 +17,11 @@ Build / deploy:
 
 ```bash
 npm run build
-npm run deploy   # requires Cloudflare auth + wrangler
+npm run deploy              # staging on workers.dev (bookmark this)
+npm run deploy:production   # production Worker — wait for DNS go-ahead
 ```
+
+See [docs/STAGING.md](docs/STAGING.md) for the preview URL and how updates show up.
 
 ## Design pack (from Grokbot)
 
@@ -30,6 +33,8 @@ npm run deploy   # requires Cloudflare auth + wrangler
 | [docs/BRIEF-home-2026-09-09.md](docs/BRIEF-home-2026-09-09.md) | Home brief |
 | [docs/preview/](docs/preview/) | HTML mock reference |
 | [public/apps/](public/apps/) | App screenshots |
+| [docs/legal/PRIVACY.md](docs/legal/PRIVACY.md) | Privacy policy (source of truth; port to `/privacy` later) |
+| [docs/legal/TERMS.md](docs/legal/TERMS.md) | Terms & license (source of truth; port to `/terms` later) |
 
 ## Routes (stubbed)
 
@@ -57,11 +62,15 @@ See [docs/PADDLE-CHECKOUT.md](docs/PADDLE-CHECKOUT.md).
 
 ## Free tools
 
-See [docs/FREE-TOOLS.md](docs/FREE-TOOLS.md). Needs Grokbot Calc pack handoff before real calculators land.
+See [docs/FREE-TOOLS.md](docs/FREE-TOOLS.md).
+
+- `/audio-live-sound/speaker-delay` — speaker delay (lock: 30 m / 20 m / 20 °C → 29.1 ms, Delay path B)
+- `/guitar-building/fret-position-calculator` — fret positions (lock: 25.500 in → d(12) = 12.750, Pass)
+- Remaining catalog names stay muted until later Origin ports
 
 ## Next build pass
 
 1. Implement homepage from kickoff + preview HTML.
 2. Product pages with buy CTAs.
 3. Connect free-tools pack under locked path prefixes.
-4. Staging deploy, then DNS when green-lit.
+4. Staging deploy on workers.dev, then DNS when green-lit. See [docs/STAGING.md](docs/STAGING.md).
