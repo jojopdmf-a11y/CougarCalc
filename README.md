@@ -33,6 +33,8 @@ See [docs/STAGING.md](docs/STAGING.md) for the preview URL and how updates show 
 | [docs/BRIEF-home-2026-09-09.md](docs/BRIEF-home-2026-09-09.md) | Home brief |
 | [docs/preview/](docs/preview/) | HTML mock reference |
 | [public/apps/](public/apps/) | App screenshots |
+| [docs/legal/PRIVACY.md](docs/legal/PRIVACY.md) | Privacy policy (source of truth; port to `/privacy` later) |
+| [docs/legal/TERMS.md](docs/legal/TERMS.md) | Terms & license (source of truth; port to `/terms` later) |
 
 ## Routes (stubbed)
 
