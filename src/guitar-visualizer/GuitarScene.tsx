@@ -121,7 +121,7 @@ export function GuitarScene({
       className="gv-canvas"
       shadows
       dpr={[1, 1.75]}
-      camera={{ position: [1.6, 1.2, 2.4], fov: 42, near: 0.1, far: 50 }}
+      camera={{ position: [2.2, 1.5, 2.8], fov: 42, near: 0.1, far: 50 }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       onCreated={onCreated}
     >
@@ -149,7 +149,7 @@ export function GuitarScene({
         dampingFactor={0.08}
         minDistance={1.2}
         maxDistance={6}
-        target={[0, 0.1, 0.4]}
+        target={[0, 0.95, 0]}
       />
       <PerfProbe onStats={onStats} />
     </Canvas>

@@ -1,7 +1,13 @@
+import { useGLTF } from '@react-three/drei'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import type { ConfigState, PickupKind } from './types'
 import { FINISH_COLORS, HARDWARE_COLORS, pickupSlots } from './types'
+
+const S_STYLE_GLB = '/guitar-visualizer/s-style.glb'
+const T_STYLE_GLB = '/guitar-visualizer/t-style.glb'
+/** Longest-axis size that roughly matches the procedural spike guitar. */
+const IMPORTED_TARGET_LENGTH = 2.2
 
 type GuitarModelProps = {
   config: ConfigState
@@ -9,16 +15,24 @@ type GuitarModelProps = {
   highlightBody: boolean
 }
 
+function importedGlbUrl(shape: ConfigState['bodyShape']): string | null {
+  if (shape === 'double-cut') return S_STYLE_GLB
+  if (shape === 'single-cut') return T_STYLE_GLB
+  return null
+}
+
 /**
  * Procedural placeholder parts (GLB-ready sockets).
  * Naming scheme: part-{family}-{variant}.glb — see docs/guitar-visualizer-go-nogo.md
+ * S-Style / T-Style use imported GLB previews; procedural body/neck/hardware stay hidden for those.
  */
 export function GuitarModel({ config, onReady, highlightBody }: GuitarModelProps) {
   const group = useRef<THREE.Group>(null)
+  const glbUrl = importedGlbUrl(config.bodyShape)
 
   useLayoutEffect(() => {
-    onReady()
-  }, [onReady])
+    if (!glbUrl) onReady()
+  }, [onReady, glbUrl])
 
   const finish = FINISH_COLORS[config.bodyFinish]
   const hardware = HARDWARE_COLORS[config.hardware]
@@ -29,15 +43,84 @@ export function GuitarModel({ config, onReady, highlightBody }: GuitarModelProps
 
   return (
     <group ref={group} scale={[mirror, 1, 1]} position={[0, 0, 0]}>
-      <BodyMesh shape={config.bodyShape} color={finish} highlight={highlightBody} />
-      <NeckMesh hardware={hardware} />
-      <HeadstockMesh hardware={hardware} stringCount={6} />
-      <BridgeMesh hardware={hardware} stringCount={6} />
-      <PickupBank slots={slots} hardware={hardware} />
-      <ControlsMesh hardware={hardware} />
+      {glbUrl ? (
+        <ImportedGlbModel
+          url={glbUrl}
+          name={config.bodyShape === 'double-cut' ? 'part-s-style-glb' : 'part-t-style-glb'}
+          onReady={onReady}
+          highlight={highlightBody}
+        />
+      ) : (
+        <>
+          <BodyMesh shape={config.bodyShape} color={finish} highlight={highlightBody} />
+          <NeckMesh hardware={hardware} />
+          <HeadstockMesh hardware={hardware} stringCount={6} />
+          <BridgeMesh hardware={hardware} stringCount={6} />
+          <PickupBank slots={slots} hardware={hardware} />
+          <ControlsMesh hardware={hardware} />
+        </>
+      )}
     </group>
   )
 }
+
+/** Imported guitar GLB — hide procedural parts so we can eye-test the mesh alone. */
+function ImportedGlbModel({
+  url,
+  name,
+  onReady,
+  highlight,
+}: {
+  url: string
+  name: string
+  onReady: () => void
+  highlight: boolean
+}) {
+  const { scene } = useGLTF(url)
+
+  const fitted = useMemo(() => {
+    const clone = scene.clone(true)
+    const box = new THREE.Box3().setFromObject(clone)
+    const size = box.getSize(new THREE.Vector3())
+    const center = box.getCenter(new THREE.Vector3())
+    const wrapper = new THREE.Group()
+    wrapper.name = name
+    clone.position.set(-center.x, -center.y, -center.z)
+    wrapper.add(clone)
+    const longest = Math.max(size.x, size.y, size.z) || 1
+    wrapper.scale.setScalar(IMPORTED_TARGET_LENGTH / longest)
+    // Sit the mesh on the floor so the body is not buried under the ground plane.
+    wrapper.updateMatrixWorld(true)
+    const fittedBox = new THREE.Box3().setFromObject(wrapper)
+    wrapper.position.y -= fittedBox.min.y
+    return wrapper
+  }, [scene, name])
+
+  useLayoutEffect(() => {
+    fitted.traverse((obj) => {
+      const mesh = obj as THREE.Mesh
+      if (!mesh.isMesh) return
+      const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material]
+      for (const mat of mats) {
+        const std = mat as THREE.MeshStandardMaterial
+        if (!std || typeof std !== 'object') continue
+        if ('emissive' in std && std.emissive) {
+          std.emissive.set(highlight ? '#00D8FF' : '#000000')
+          std.emissiveIntensity = highlight ? 0.35 : 0
+        }
+      }
+    })
+  }, [fitted, highlight])
+
+  useLayoutEffect(() => {
+    onReady()
+  }, [onReady, fitted])
+
+  return <primitive object={fitted} />
+}
+
+useGLTF.preload(S_STYLE_GLB)
+useGLTF.preload(T_STYLE_GLB)
 
 function emissiveFor(highlight: boolean) {
   return highlight ? '#00D8FF' : '#000000'
