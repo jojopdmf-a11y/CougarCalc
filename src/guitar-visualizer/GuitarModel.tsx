@@ -4,15 +4,19 @@ import * as THREE from 'three'
 import type { ConfigState, PickupKind } from './types'
 import { FINISH_COLORS, HARDWARE_COLORS, pickupSlots } from './types'
 
-/** Separable body + neck(+headstock) parts — same world space from Blender export. */
+/**
+ * Pale-grey blank body + neck(+headstock) — hardware stripped, frets kept.
+ * Painted predecessors (s/t-style-{body,neck}.glb) remain in public/ for compare.
+ * Attribution: varin (S-Style), Jesus/@gsusvfx (T-Style).
+ */
 const S_STYLE_PARTS = {
-  body: '/guitar-visualizer/s-style-body.glb',
-  neck: '/guitar-visualizer/s-style-neck.glb',
+  body: '/guitar-visualizer/s-style-body-raw.glb',
+  neck: '/guitar-visualizer/s-style-neck-raw.glb',
   name: 'part-s-style',
 } as const
 const T_STYLE_PARTS = {
-  body: '/guitar-visualizer/t-style-body.glb',
-  neck: '/guitar-visualizer/t-style-neck.glb',
+  body: '/guitar-visualizer/t-style-body-raw.glb',
+  neck: '/guitar-visualizer/t-style-neck-raw.glb',
   name: 'part-t-style',
 } as const
 
