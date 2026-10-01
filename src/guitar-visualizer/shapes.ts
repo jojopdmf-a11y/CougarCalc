@@ -6,6 +6,9 @@ import * as THREE from 'three'
  * Units are scene meters; +Y in 2D = toward the headstock before extrudeFaceUp().
  */
 
+/** Body face sits near this world Y after extrudeFaceUp (top of slab). */
+export const BODY_TOP_Y = 0.17
+
 export function extrudeFaceUp(
   shape: THREE.Shape,
   depth: number,
@@ -14,46 +17,52 @@ export function extrudeFaceUp(
   const geo = new THREE.ExtrudeGeometry(shape, {
     depth,
     bevelEnabled: bevel,
-    bevelThickness: bevel ? 0.022 : 0,
-    bevelSize: bevel ? 0.018 : 0,
-    bevelSegments: bevel ? 3 : 0,
-    curveSegments: 28,
+    bevelThickness: bevel ? 0.018 : 0,
+    bevelSize: bevel ? 0.014 : 0,
+    bevelSegments: bevel ? 2 : 0,
+    curveSegments: 36,
   })
   // Face in XY, +Y toward neck → after rotateX(+90°), +Y maps to +Z (neck).
   geo.rotateX(Math.PI / 2)
-  geo.center()
-  // Keep the top face near y ≈ +depth/2 after center; nudge so top sits near y=0.09.
-  geo.translate(0, depth / 2, 0)
+  geo.computeBoundingBox()
+  const box = geo.boundingBox!
+  // Pin bottom to y=0 and center XZ — keeps the top face at ~depth for hardware seating.
+  geo.translate(-(box.min.x + box.max.x) / 2, -box.min.y, -(box.min.z + box.max.z) / 2)
   return geo
 }
 
-/** Double-cut / Strat-style body — horns at neck end, rounded bout at bridge end. */
+/**
+ * Double-cut / Strat-style body.
+ * Deep cutaways, longer bass horn, shorter treble horn — readable at a glance.
+ */
 export function createDoubleCutStratBodyShape(): THREE.Shape {
   const s = new THREE.Shape()
-  // Start at neck-pocket center (bass edge), go clockwise: upper horn → bout → lower horn → pocket.
   // X: bass (−) / treble (+). Y: bridge (−) / neck (+).
-  s.moveTo(-0.12, 0.92)
+  // Start at bass edge of neck pocket.
+  s.moveTo(-0.11, 0.88)
 
-  // Bass-side upper horn (longer, pointed)
-  s.bezierCurveTo(-0.28, 0.98, -0.48, 0.95, -0.58, 0.78)
-  s.bezierCurveTo(-0.68, 0.58, -0.66, 0.38, -0.55, 0.22)
+  // Long bass horn (points past the pocket toward the headstock)
+  s.bezierCurveTo(-0.22, 1.02, -0.42, 1.08, -0.55, 0.98)
+  s.bezierCurveTo(-0.68, 0.88, -0.72, 0.68, -0.66, 0.5)
 
-  // Bass waist into upper bout
-  s.bezierCurveTo(-0.72, 0.05, -0.78, -0.25, -0.72, -0.52)
-  s.bezierCurveTo(-0.68, -0.78, -0.48, -0.98, -0.18, -1.05)
+  // Deep bass cutaway into waist
+  s.bezierCurveTo(-0.58, 0.34, -0.48, 0.22, -0.42, 0.08)
+  s.bezierCurveTo(-0.55, -0.05, -0.7, -0.22, -0.74, -0.45)
+  s.bezierCurveTo(-0.78, -0.7, -0.68, -0.95, -0.42, -1.08)
 
-  // Bridge-end bottom curve
-  s.bezierCurveTo(0.05, -1.1, 0.28, -1.08, 0.48, -0.95)
-  s.bezierCurveTo(0.68, -0.78, 0.74, -0.52, 0.7, -0.28)
+  // Bridge-end bout
+  s.bezierCurveTo(-0.18, -1.18, 0.18, -1.18, 0.42, -1.08)
+  s.bezierCurveTo(0.68, -0.95, 0.78, -0.7, 0.74, -0.45)
+  s.bezierCurveTo(0.7, -0.22, 0.55, -0.05, 0.4, 0.1)
 
-  // Treble waist into lower horn (shorter, rounder)
-  s.bezierCurveTo(0.66, -0.05, 0.58, 0.18, 0.42, 0.32)
-  s.bezierCurveTo(0.55, 0.48, 0.58, 0.68, 0.48, 0.82)
-  s.bezierCurveTo(0.38, 0.92, 0.22, 0.96, 0.1, 0.92)
+  // Treble waist → shorter rounded horn
+  s.bezierCurveTo(0.32, 0.22, 0.28, 0.34, 0.34, 0.48)
+  s.bezierCurveTo(0.42, 0.62, 0.52, 0.72, 0.48, 0.82)
+  s.bezierCurveTo(0.44, 0.9, 0.3, 0.94, 0.14, 0.9)
 
   // Neck pocket mouth (treble → bass)
-  s.lineTo(0.1, 0.92)
-  s.bezierCurveTo(0.02, 0.88, -0.04, 0.88, -0.12, 0.92)
+  s.lineTo(0.11, 0.88)
+  s.lineTo(-0.11, 0.88)
 
   return s
 }
@@ -88,21 +97,23 @@ export function createOffsetBodyShape(): THREE.Shape {
 
 /**
  * Classic 6-inline paddle headstock (all tuners on the bass side).
- * Local 2D: +Y toward tip, X across; origin near the nut joint.
+ * Strongly asymmetric: straighter treble edge, scalloped bass edge, tipped point.
  */
 export function createSixInlineHeadstockShape(): THREE.Shape {
   const s = new THREE.Shape()
-  // Nut-edge (wide end), clockwise around paddle tip.
-  s.moveTo(-0.08, 0.0)
-  s.lineTo(0.08, 0.0)
-  // Treble edge (no tuners) — gentle curve toward tip
-  s.bezierCurveTo(0.1, 0.08, 0.11, 0.2, 0.1, 0.32)
-  s.bezierCurveTo(0.08, 0.42, 0.04, 0.5, -0.02, 0.55)
-  // Tip
-  s.bezierCurveTo(-0.06, 0.58, -0.1, 0.56, -0.12, 0.5)
-  // Bass edge (tuner side) — stepped paddle silhouette
-  s.bezierCurveTo(-0.16, 0.42, -0.18, 0.32, -0.17, 0.22)
-  s.bezierCurveTo(-0.16, 0.12, -0.14, 0.05, -0.08, 0.0)
+  // Nut edge (wide), clockwise toward tip.
+  s.moveTo(-0.07, 0.0)
+  s.lineTo(0.075, 0.0)
+  // Treble edge — mostly straight, slight taper
+  s.lineTo(0.085, 0.12)
+  s.bezierCurveTo(0.09, 0.28, 0.08, 0.42, 0.055, 0.52)
+  // Tip bends toward bass side
+  s.bezierCurveTo(0.03, 0.58, -0.02, 0.6, -0.07, 0.56)
+  s.bezierCurveTo(-0.11, 0.52, -0.13, 0.46, -0.135, 0.4)
+  // Bass edge — stepped / scalloped tuner side
+  s.bezierCurveTo(-0.15, 0.34, -0.155, 0.28, -0.15, 0.22)
+  s.bezierCurveTo(-0.145, 0.16, -0.14, 0.1, -0.13, 0.06)
+  s.bezierCurveTo(-0.12, 0.03, -0.1, 0.01, -0.07, 0.0)
   return s
 }
 
