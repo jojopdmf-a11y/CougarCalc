@@ -60,14 +60,25 @@ export function pickupSlots(layout: PickupLayout): PickupKind[] {
   }
 }
 
+export function bodyShapeLabel(shape: BodyShape): string {
+  switch (shape) {
+    case 'double-cut':
+      return 'S-Style'
+    case 'single-cut':
+      return 'Single-cut'
+    case 'offset':
+      return 'Offset'
+  }
+}
+
 export function statusLine(config: ConfigState): string {
   const strings = config.instrument === 'guitar' ? '6-string' : '4-string'
-  return `Building: ${strings}, ${config.bodyShape} body`
+  return `Building: ${strings}, ${bodyShapeLabel(config.bodyShape)} body`
 }
 
 export const DEFAULT_CONFIG: ConfigState = {
   instrument: 'guitar',
-  bodyShape: 'offset',
+  bodyShape: 'double-cut',
   handedness: 'right',
   bodyFinish: 'black',
   hardware: 'chrome',

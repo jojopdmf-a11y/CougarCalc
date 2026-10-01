@@ -6,6 +6,7 @@ import { GuitarScene } from '../guitar-visualizer/GuitarScene'
 import { resetView } from '../guitar-visualizer/resetView'
 import {
   DEFAULT_CONFIG,
+  bodyShapeLabel,
   statusLine,
   type ConfigState,
   type LoadStats,
@@ -66,7 +67,7 @@ export function GuitarVisualizerPage() {
   const checklist = useMemo(
     () => [
       `Instrument: electric ${config.instrument === 'guitar' ? '6-string' : '4-string'}`,
-      `Body: ${config.bodyShape}`,
+      `Body: ${bodyShapeLabel(config.bodyShape)}`,
       `Hand: ${config.handedness}-handed`,
       `Finish: ${config.bodyFinish}`,
       `Hardware: ${config.hardware}`,
