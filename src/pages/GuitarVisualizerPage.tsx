@@ -66,7 +66,14 @@ export function GuitarVisualizerPage() {
   const checklist = useMemo(
     () => [
       `Instrument: electric ${config.instrument === 'guitar' ? '6-string' : '4-string'}`,
-      `Body: ${config.bodyShape}`,
+      `Body: ${
+        config.bodyShape === 'double-cut'
+          ? 'Double-cut / Strat-style'
+          : config.bodyShape === 'single-cut'
+            ? 'Single-cut'
+            : 'Offset'
+      }`,
+      `Neck: bolt-on · 6-inline headstock`,
       `Hand: ${config.handedness}-handed`,
       `Finish: ${config.bodyFinish}`,
       `Hardware: ${config.hardware}`,

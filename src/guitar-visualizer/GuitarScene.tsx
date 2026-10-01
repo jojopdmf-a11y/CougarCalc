@@ -49,9 +49,10 @@ function PerfProbe({ onStats }: { onStats: (s: Partial<LoadStats>) => void }) {
 function SceneLights() {
   return (
     <>
-      <ambientLight intensity={0.45} />
-      <directionalLight position={[4, 8, 3]} intensity={1.15} castShadow />
-      <directionalLight position={[-3, 2, -2]} intensity={0.35} />
+      <ambientLight intensity={0.55} />
+      <directionalLight position={[3, 7, 4]} intensity={1.35} castShadow />
+      <directionalLight position={[-4, 3, -1]} intensity={0.45} />
+      <directionalLight position={[0, 2, -5]} intensity={0.25} />
     </>
   )
 }
@@ -121,13 +122,13 @@ export function GuitarScene({
       className="gv-canvas"
       shadows
       dpr={[1, 1.75]}
-      camera={{ position: [1.6, 1.2, 2.4], fov: 42, near: 0.1, far: 50 }}
+      camera={{ position: [2.2, 1.6, 1.1], fov: 40, near: 0.1, far: 50 }}
       gl={{ antialias: true, powerPreference: 'high-performance' }}
       onCreated={onCreated}
     >
       <color attach="background" args={['#070B12']} />
       <SceneLights />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.12, 0]} receiveShadow>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.05, 0.4]} receiveShadow>
         <circleGeometry args={[4, 48]} />
         <meshStandardMaterial color="#0A121C" roughness={1} metalness={0} />
       </mesh>
@@ -148,8 +149,8 @@ export function GuitarScene({
         enableDamping
         dampingFactor={0.08}
         minDistance={1.2}
-        maxDistance={6}
-        target={[0, 0.1, 0.4]}
+        maxDistance={7}
+        target={[0, 0.12, 0.55]}
       />
       <PerfProbe onStats={onStats} />
     </Canvas>

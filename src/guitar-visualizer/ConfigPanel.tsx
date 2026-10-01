@@ -29,7 +29,7 @@ const SECTIONS: { id: SectionId; title: string; later?: boolean }[] = [
   { id: 'finish', title: 'Body finish' },
   { id: 'hardware', title: 'Hardware' },
   { id: 'pickups', title: 'Pickups / electronics' },
-  { id: 'neck', title: 'Neck & fretboard', later: true },
+  { id: 'neck', title: 'Neck & headstock' },
   { id: 'inlays', title: 'Inlays & cosmetics', later: true },
   { id: 'extras', title: 'Extras (optional)', later: true },
 ]
@@ -141,14 +141,24 @@ function SectionOptions({
         name="body"
         value={config.bodyShape}
         options={[
-          { value: 'single-cut', label: 'Single-cut' },
-          { value: 'double-cut', label: 'Double-cut' },
-          { value: 'offset', label: 'Offset' },
+          { value: 'double-cut', label: 'Double-cut / Strat-style' },
+          { value: 'single-cut', label: 'Single-cut (placeholder)' },
+          { value: 'offset', label: 'Offset (placeholder)' },
         ]}
         config={config}
         field="bodyShape"
         onPick={(value) => onChange({ bodyShape: value as ConfigState['bodyShape'] })}
       />
+    )
+  }
+  if (id === 'neck') {
+    return (
+      <div className="gv-options" role="group" aria-label="neck">
+        <p className="gv-later" style={{ margin: 0 }}>
+          Shape set 1: bolt-on neck with a <strong>6-inline headstock</strong> (tuners on one side). More
+          headstock styles come later.
+        </p>
+      </div>
     )
   }
   if (id === 'hand') {
