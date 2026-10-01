@@ -69,11 +69,11 @@ function ReadyReporter({
   config: ConfigState
   highlightBody: boolean
 }) {
-  const notified = useRef(false)
+  const ready = useRef(false)
 
   const handleReady = useCallback(() => {
-    if (notified.current) return
-    notified.current = true
+    if (ready.current) return
+    ready.current = true
     const readyAt = performance.now()
     onProgress(100)
     onStats({
@@ -84,18 +84,24 @@ function ReadyReporter({
   }, [onProgress, onStats, startedAt])
 
   useEffect(() => {
-    // Non-blocking staged progress for placeholder parts (instant meshes).
+    // Staged progress only until the model reports ready — never overwrite 100%.
+    if (ready.current) return
     let cancelled = false
-    notified.current = false
     const steps = [15, 40, 70, 90]
-    steps.forEach((pct, i) => {
+    const timers = steps.map((pct, i) =>
       window.setTimeout(() => {
-        if (!cancelled && !notified.current) onProgress(pct)
-      }, 40 + i * 60)
-    })
+        if (!cancelled && !ready.current) onProgress(pct)
+      }, 40 + i * 60),
+    )
     return () => {
       cancelled = true
+      timers.forEach((id) => window.clearTimeout(id))
     }
+  }, [onProgress])
+
+  // Config swaps are instant; keep progress at ready without re-blocking the UI.
+  useEffect(() => {
+    if (ready.current) onProgress(100)
   }, [config, onProgress])
 
   return <GuitarModel config={config} onReady={handleReady} highlightBody={highlightBody} />
