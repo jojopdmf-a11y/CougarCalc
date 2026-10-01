@@ -183,9 +183,9 @@ function TunerRow({ hardware, stringCount }: { hardware: string; stringCount: nu
       const t = stringCount === 1 ? 0.5 : i / (stringCount - 1)
       // Space along the longer paddle; slight bass-side inset follows scallops.
       return {
-        x: -0.132 - t * 0.012,
-        z: 0.09 + t * 0.52,
-        y: 0.052,
+        x: -0.175 - t * 0.02,
+        z: 0.1 + t * 0.52,
+        y: 0.05,
       }
     })
   }, [stringCount])

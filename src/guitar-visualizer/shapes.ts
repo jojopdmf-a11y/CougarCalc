@@ -11,8 +11,8 @@ import * as THREE from 'three'
  * X: bass (−) / treble (+). Y: bridge (−) / neck (+).
  */
 
-/** Body face sits near this world Y after extrudeFaceUp (top of slab). ~1.75" at body scale. */
-export const BODY_TOP_Y = 0.2
+/** Body face sits near this world Y after extrudeFaceUp (top of slab). ~1.6" visual thickness. */
+export const BODY_TOP_Y = 0.175
 
 /** Neck-pocket mouth Y in the Strat body shape (before extrude centering). */
 export const STRAT_POCKET_MOUTH_Y = 0.756
@@ -28,9 +28,9 @@ export function extrudeFaceUp(
   const geo = new THREE.ExtrudeGeometry(shape, {
     depth,
     bevelEnabled: bevel,
-    bevelThickness: bevel ? 0.016 : 0,
-    bevelSize: bevel ? 0.012 : 0,
-    bevelSegments: bevel ? 3 : 0,
+    bevelThickness: bevel ? 0.008 : 0,
+    bevelSize: bevel ? 0.006 : 0,
+    bevelSegments: bevel ? 2 : 0,
     curveSegments: 48,
   })
   // Face in XY, +Y toward neck → after rotateX(+90°), +Y maps to +Z (neck).
@@ -134,32 +134,32 @@ export function createOffsetBodyShape(): THREE.Shape {
 
 /**
  * Classic asymmetric 6-inline paddle headstock.
- * Traced from published Strat-style builder proportions (brand-agnostic):
- * ~6.5" tip length, nut ~1-11/16", tip hooked toward bass, scalloped tuner edge.
+ * Wider Strat-style paddle, tip hooked hard to bass with a pointed nose,
+ * flatter treble flank, scooped bass tuner edge. Brand-agnostic.
  * Local coords: nut at y=0, tip toward +y; bass (−x) / treble (+x).
  */
 export function createSixInlineHeadstockShape(): THREE.Shape {
   const s = new THREE.Shape()
-  // Nut edge (matches fretboard width ~0.175 plus slight overhang)
-  s.moveTo(-0.095, 0.0)
-  s.lineTo(0.092, 0.0)
+  // Nut edge
+  s.moveTo(-0.112, 0.0)
+  s.lineTo(0.108, 0.0)
 
-  // Treble edge — mostly clean, slight flare then taper to tip
-  s.bezierCurveTo(0.108, 0.04, 0.118, 0.1, 0.122, 0.18)
-  s.bezierCurveTo(0.126, 0.28, 0.12, 0.4, 0.1, 0.52)
-  s.bezierCurveTo(0.088, 0.58, 0.07, 0.64, 0.045, 0.69)
+  // Treble flank — nearly straight rail into the tip
+  s.lineTo(0.135, 0.04)
+  s.lineTo(0.16, 0.18)
+  s.bezierCurveTo(0.175, 0.32, 0.17, 0.46, 0.145, 0.56)
+  s.bezierCurveTo(0.125, 0.63, 0.09, 0.68, 0.045, 0.71)
 
-  // Tip — classic hooked point toward bass side
-  s.bezierCurveTo(0.025, 0.725, 0.0, 0.745, -0.03, 0.75)
-  s.bezierCurveTo(-0.06, 0.754, -0.095, 0.74, -0.12, 0.71)
-  s.bezierCurveTo(-0.14, 0.685, -0.152, 0.65, -0.158, 0.61)
+  // Tip nose — pointed and clearly bass-biased (not a round pill)
+  s.bezierCurveTo(0.015, 0.73, -0.02, 0.742, -0.06, 0.738)
+  s.bezierCurveTo(-0.1, 0.732, -0.14, 0.71, -0.175, 0.67)
+  s.bezierCurveTo(-0.205, 0.635, -0.23, 0.59, -0.245, 0.535)
 
-  // Bass edge — scalloped pockets for 6 inline tuners (tip → nut)
-  s.bezierCurveTo(-0.165, 0.56, -0.172, 0.52, -0.175, 0.48)
-  s.bezierCurveTo(-0.178, 0.43, -0.176, 0.385, -0.172, 0.34)
-  s.bezierCurveTo(-0.168, 0.295, -0.17, 0.25, -0.168, 0.205)
-  s.bezierCurveTo(-0.166, 0.16, -0.162, 0.115, -0.155, 0.075)
-  s.bezierCurveTo(-0.148, 0.04, -0.13, 0.015, -0.095, 0.0)
+  // Bass edge — deep concave scoop for 6 tuners
+  s.bezierCurveTo(-0.255, 0.48, -0.26, 0.41, -0.255, 0.34)
+  s.bezierCurveTo(-0.25, 0.27, -0.245, 0.2, -0.23, 0.14)
+  s.bezierCurveTo(-0.215, 0.09, -0.19, 0.045, -0.155, 0.02)
+  s.bezierCurveTo(-0.14, 0.008, -0.125, 0.0, -0.112, 0.0)
 
   return s
 }

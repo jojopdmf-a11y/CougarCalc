@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
 import { ConfigPanel } from '../guitar-visualizer/ConfigPanel'
 import { GuitarScene } from '../guitar-visualizer/GuitarScene'
-import { resetView } from '../guitar-visualizer/resetView'
+import { resetView, setViewPreset, type ViewPreset } from '../guitar-visualizer/resetView'
 import {
   DEFAULT_CONFIG,
   statusLine,
@@ -134,13 +134,32 @@ export function GuitarVisualizerPage() {
             </button>
           )}
 
-          <button
-            type="button"
-            className="gv-reset"
-            onClick={() => resetView(controlsRef.current)}
-          >
-            Reset view
-          </button>
+          <div className="gv-view-presets" role="group" aria-label="Camera presets">
+            <button
+              type="button"
+              className="gv-reset"
+              data-view-preset="full"
+              onClick={() => resetView(controlsRef.current)}
+            >
+              Reset view
+            </button>
+            <button
+              type="button"
+              className="gv-preset"
+              data-view-preset="body-top"
+              onClick={() => setViewPreset(controlsRef.current, 'body-top' satisfies ViewPreset)}
+            >
+              Body top
+            </button>
+            <button
+              type="button"
+              className="gv-preset"
+              data-view-preset="headstock"
+              onClick={() => setViewPreset(controlsRef.current, 'headstock')}
+            >
+              Headstock
+            </button>
+          </div>
 
           <GuitarScene
             config={config}
