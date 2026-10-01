@@ -89,8 +89,10 @@ function ImportedGlbModel({
     wrapper.add(clone)
     const longest = Math.max(size.x, size.y, size.z) || 1
     wrapper.scale.setScalar(IMPORTED_TARGET_LENGTH / longest)
-    // Scene camera looks along −Z toward a guitar that lies mostly on +Z; lay the import flat.
-    wrapper.rotation.set(0, Math.PI / 2, 0)
+    // Sit the mesh on the floor so the body is not buried under the ground plane.
+    wrapper.updateMatrixWorld(true)
+    const fittedBox = new THREE.Box3().setFromObject(wrapper)
+    wrapper.position.y -= fittedBox.min.y
     return wrapper
   }, [scene, name])
 
