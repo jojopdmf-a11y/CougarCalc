@@ -4,10 +4,22 @@ import * as THREE from 'three'
 import type { ConfigState, PickupKind } from './types'
 import { FINISH_COLORS, HARDWARE_COLORS, pickupSlots } from './types'
 
-const S_STYLE_GLB = '/guitar-visualizer/s-style.glb'
-const T_STYLE_GLB = '/guitar-visualizer/t-style.glb'
+/** Separable body + neck(+headstock) parts — same world space from Blender export. */
+const S_STYLE_PARTS = {
+  body: '/guitar-visualizer/s-style-body.glb',
+  neck: '/guitar-visualizer/s-style-neck.glb',
+  name: 'part-s-style',
+} as const
+const T_STYLE_PARTS = {
+  body: '/guitar-visualizer/t-style-body.glb',
+  neck: '/guitar-visualizer/t-style-neck.glb',
+  name: 'part-t-style',
+} as const
+
 /** Longest-axis size that roughly matches the procedural spike guitar. */
 const IMPORTED_TARGET_LENGTH = 2.2
+
+type ImportedParts = typeof S_STYLE_PARTS | typeof T_STYLE_PARTS
 
 type GuitarModelProps = {
   config: ConfigState
@@ -15,24 +27,25 @@ type GuitarModelProps = {
   highlightBody: boolean
 }
 
-function importedGlbUrl(shape: ConfigState['bodyShape']): string | null {
-  if (shape === 'double-cut') return S_STYLE_GLB
-  if (shape === 'single-cut') return T_STYLE_GLB
+function importedParts(shape: ConfigState['bodyShape']): ImportedParts | null {
+  if (shape === 'double-cut') return S_STYLE_PARTS
+  if (shape === 'single-cut') return T_STYLE_PARTS
   return null
 }
 
 /**
  * Procedural placeholder parts (GLB-ready sockets).
  * Naming scheme: part-{family}-{variant}.glb — see docs/guitar-visualizer-go-nogo.md
- * S-Style / T-Style use imported GLB previews; procedural body/neck/hardware stay hidden for those.
+ * S-Style / T-Style load separable body + neck(+headstock) GLBs assembled in shared space;
+ * procedural body/neck/hardware stay hidden for those styles.
  */
 export function GuitarModel({ config, onReady, highlightBody }: GuitarModelProps) {
   const group = useRef<THREE.Group>(null)
-  const glbUrl = importedGlbUrl(config.bodyShape)
+  const parts = importedParts(config.bodyShape)
 
   useLayoutEffect(() => {
-    if (!glbUrl) onReady()
-  }, [onReady, glbUrl])
+    if (!parts) onReady()
+  }, [onReady, parts])
 
   const finish = FINISH_COLORS[config.bodyFinish]
   const hardware = HARDWARE_COLORS[config.hardware]
@@ -43,13 +56,8 @@ export function GuitarModel({ config, onReady, highlightBody }: GuitarModelProps
 
   return (
     <group ref={group} scale={[mirror, 1, 1]} position={[0, 0, 0]}>
-      {glbUrl ? (
-        <ImportedGlbModel
-          url={glbUrl}
-          name={config.bodyShape === 'double-cut' ? 'part-s-style-glb' : 'part-t-style-glb'}
-          onReady={onReady}
-          highlight={highlightBody}
-        />
+      {parts ? (
+        <ImportedPartsModel parts={parts} onReady={onReady} highlight={highlightBody} />
       ) : (
         <>
           <BodyMesh shape={config.bodyShape} color={finish} highlight={highlightBody} />
@@ -64,29 +72,42 @@ export function GuitarModel({ config, onReady, highlightBody }: GuitarModelProps
   )
 }
 
-/** Imported guitar GLB — hide procedural parts so we can eye-test the mesh alone. */
-function ImportedGlbModel({
-  url,
-  name,
+/** Body + neck GLBs sharing Blender world space — fit as one assembled guitar. */
+function ImportedPartsModel({
+  parts,
   onReady,
   highlight,
 }: {
-  url: string
-  name: string
+  parts: ImportedParts
   onReady: () => void
   highlight: boolean
 }) {
-  const { scene } = useGLTF(url)
+  const bodyGltf = useGLTF(parts.body)
+  const neckGltf = useGLTF(parts.neck)
 
   const fitted = useMemo(() => {
-    const clone = scene.clone(true)
-    const box = new THREE.Box3().setFromObject(clone)
+    const wrapper = new THREE.Group()
+    wrapper.name = parts.name
+
+    const bodyRoot = new THREE.Group()
+    bodyRoot.name = `${parts.name}-body`
+    bodyRoot.add(bodyGltf.scene.clone(true))
+
+    const neckRoot = new THREE.Group()
+    neckRoot.name = `${parts.name}-neck`
+    neckRoot.add(neckGltf.scene.clone(true))
+
+    const assembly = new THREE.Group()
+    assembly.name = `${parts.name}-assembly`
+    assembly.add(bodyRoot)
+    assembly.add(neckRoot)
+
+    const box = new THREE.Box3().setFromObject(assembly)
     const size = box.getSize(new THREE.Vector3())
     const center = box.getCenter(new THREE.Vector3())
-    const wrapper = new THREE.Group()
-    wrapper.name = name
-    clone.position.set(-center.x, -center.y, -center.z)
-    wrapper.add(clone)
+    assembly.position.set(-center.x, -center.y, -center.z)
+    wrapper.add(assembly)
+
     const longest = Math.max(size.x, size.y, size.z) || 1
     wrapper.scale.setScalar(IMPORTED_TARGET_LENGTH / longest)
     // Sit the mesh on the floor so the body is not buried under the ground plane.
@@ -94,7 +115,7 @@ function ImportedGlbModel({
     const fittedBox = new THREE.Box3().setFromObject(wrapper)
     wrapper.position.y -= fittedBox.min.y
     return wrapper
-  }, [scene, name])
+  }, [bodyGltf.scene, neckGltf.scene, parts.name])
 
   useLayoutEffect(() => {
     fitted.traverse((obj) => {
@@ -119,8 +140,10 @@ function ImportedGlbModel({
   return <primitive object={fitted} />
 }
 
-useGLTF.preload(S_STYLE_GLB)
-useGLTF.preload(T_STYLE_GLB)
+useGLTF.preload(S_STYLE_PARTS.body)
+useGLTF.preload(S_STYLE_PARTS.neck)
+useGLTF.preload(T_STYLE_PARTS.body)
+useGLTF.preload(T_STYLE_PARTS.neck)
 
 function emissiveFor(highlight: boolean) {
   return highlight ? '#00D8FF' : '#000000'
