@@ -1,4 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
 import { SiteFooter } from './components/SiteFooter'
 import { SiteHeader } from './components/SiteHeader'
 import { StubPage } from './components/StubPage'
@@ -9,6 +10,10 @@ import { BuySuccessPage } from './pages/BuySuccessPage'
 import { HomePage } from './pages/HomePage'
 import { ToolsStubPage } from './pages/ToolsStubPage'
 import './styles/global.css'
+
+const GuitarVisualizerPage = lazy(() =>
+  import('./pages/GuitarVisualizerPage').then((m) => ({ default: m.GuitarVisualizerPage })),
+)
 
 export default function App() {
   return (
@@ -58,6 +63,11 @@ export default function App() {
                 <ToolsStubPage
                   title="Free tools"
                   note="Indexes for audio/live sound and guitar building land here."
+                  links={[
+                    { to: '/guitar-building/visualizer', label: '3D guitar visualizer (spike)' },
+                    { to: '/guitar-building', label: 'Guitar building' },
+                    { to: '/audio-live-sound', label: 'Audio / live sound' },
+                  ]}
                 />
               }
             />
@@ -84,8 +94,24 @@ export default function App() {
               element={
                 <ToolsStubPage
                   title="Guitar building"
-                  note="Route prefix locked. Calculators arrive when Calc pack is connected."
+                  note="Route prefix locked. Calculators arrive when Calc pack is connected. The 3D visualizer spike is live at /guitar-building/visualizer."
+                  links={[{ to: '/guitar-building/visualizer', label: '3D guitar visualizer (spike)' }]}
                 />
+              }
+            />
+            <Route
+              path="/guitar-building/visualizer"
+              element={
+                <Suspense
+                  fallback={
+                    <section className="stub">
+                      <h1>3D electric guitar visualizer</h1>
+                      <p>Loading viewer…</p>
+                    </section>
+                  }
+                >
+                  <GuitarVisualizerPage />
+                </Suspense>
               }
             />
             <Route
