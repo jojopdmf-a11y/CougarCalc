@@ -65,7 +65,7 @@ export function bodyShapeLabel(shape: BodyShape): string {
     case 'double-cut':
       return 'S-Style'
     case 'single-cut':
-      return 'Single-cut'
+      return 'T-Style'
     case 'offset':
       return 'Offset'
   }

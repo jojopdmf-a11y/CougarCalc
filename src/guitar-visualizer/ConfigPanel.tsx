@@ -57,9 +57,8 @@ export function ConfigPanel({
       <aside className={`gv-panel ${mobileOpen ? 'is-open' : ''}`} aria-label="Guitar configuration">
         <p className="gv-panel-note">
           Textures are illustrative — proportions are approximate, not a build sheet.
-          {config.bodyShape === 'double-cut' && (
-            <> S-Style 3D model by varin (CC-BY).</>
-          )}
+          {config.bodyShape === 'double-cut' && <> S-Style 3D model by varin (CC-BY).</>}
+          {config.bodyShape === 'single-cut' && <> T-Style 3D model by Jesus / @gsusvfx (CC-BY).</>}
         </p>
 
         <label className="gv-toggle-row">
@@ -146,7 +145,7 @@ function SectionOptions({
         name="body"
         value={config.bodyShape}
         options={[
-          { value: 'single-cut', label: 'Single-cut' },
+          { value: 'single-cut', label: 'T-Style' },
           { value: 'double-cut', label: 'S-Style' },
           { value: 'offset', label: 'Offset' },
         ]}
