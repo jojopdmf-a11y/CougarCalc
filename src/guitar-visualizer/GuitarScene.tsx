@@ -1,0 +1,151 @@
+import { OrbitControls } from '@react-three/drei'
+import { Canvas, useFrame } from '@react-three/fiber'
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  type MutableRefObject,
+} from 'react'
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib'
+import { GuitarModel } from './GuitarModel'
+import type { ConfigState, LoadStats } from './types'
+
+type GuitarSceneProps = {
+  config: ConfigState
+  highlightBody: boolean
+  controlsRef: MutableRefObject<OrbitControlsImpl | null>
+  onStats: (stats: Partial<LoadStats>) => void
+  onProgress: (pct: number) => void
+  onCreated: () => void
+  startedAt: number | null
+}
+
+function PerfProbe({ onStats }: { onStats: (s: Partial<LoadStats>) => void }) {
+  const frames = useRef(0)
+  const last = useRef(0)
+
+  useFrame(() => {
+    if (last.current === 0) last.current = performance.now()
+    frames.current += 1
+    const now = performance.now()
+    if (now - last.current >= 1000) {
+      const fps = Math.round((frames.current * 1000) / (now - last.current))
+      frames.current = 0
+      last.current = now
+      const perfWithMemory = performance as Performance & {
+        memory?: { usedJSHeapSize: number }
+      }
+      const memoryMb = perfWithMemory.memory
+        ? Math.round(perfWithMemory.memory.usedJSHeapSize / (1024 * 1024))
+        : null
+      onStats({ fps, memoryMb })
+    }
+  })
+
+  return null
+}
+
+function SceneLights() {
+  return (
+    <>
+      <ambientLight intensity={0.45} />
+      <directionalLight position={[4, 8, 3]} intensity={1.15} castShadow />
+      <directionalLight position={[-3, 2, -2]} intensity={0.35} />
+    </>
+  )
+}
+
+function ReadyReporter({
+  startedAt,
+  onStats,
+  onProgress,
+  config,
+  highlightBody,
+}: {
+  startedAt: number
+  onStats: (s: Partial<LoadStats>) => void
+  onProgress: (pct: number) => void
+  config: ConfigState
+  highlightBody: boolean
+}) {
+  const notified = useRef(false)
+
+  const handleReady = useCallback(() => {
+    if (notified.current) return
+    notified.current = true
+    const readyAt = performance.now()
+    onProgress(100)
+    onStats({
+      readyAt,
+      loadMs: Math.round(readyAt - startedAt),
+      startedAt,
+    })
+  }, [onProgress, onStats, startedAt])
+
+  useEffect(() => {
+    // Non-blocking staged progress for placeholder parts (instant meshes).
+    let cancelled = false
+    notified.current = false
+    const steps = [15, 40, 70, 90]
+    steps.forEach((pct, i) => {
+      window.setTimeout(() => {
+        if (!cancelled && !notified.current) onProgress(pct)
+      }, 40 + i * 60)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [config, onProgress])
+
+  return <GuitarModel config={config} onReady={handleReady} highlightBody={highlightBody} />
+}
+
+export function GuitarScene({
+  config,
+  highlightBody,
+  controlsRef,
+  onStats,
+  onProgress,
+  onCreated,
+  startedAt,
+}: GuitarSceneProps) {
+  return (
+    <Canvas
+      className="gv-canvas"
+      shadows
+      dpr={[1, 1.75]}
+      camera={{ position: [1.6, 1.2, 2.4], fov: 42, near: 0.1, far: 50 }}
+      gl={{ antialias: true, powerPreference: 'high-performance' }}
+      onCreated={onCreated}
+    >
+      <color attach="background" args={['#070B12']} />
+      <SceneLights />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.12, 0]} receiveShadow>
+        <circleGeometry args={[4, 48]} />
+        <meshStandardMaterial color="#0A121C" roughness={1} metalness={0} />
+      </mesh>
+      <Suspense fallback={null}>
+        {startedAt != null && (
+          <ReadyReporter
+            startedAt={startedAt}
+            onStats={onStats}
+            onProgress={onProgress}
+            config={config}
+            highlightBody={highlightBody}
+          />
+        )}
+      </Suspense>
+      <OrbitControls
+        ref={controlsRef}
+        makeDefault
+        enableDamping
+        dampingFactor={0.08}
+        minDistance={1.2}
+        maxDistance={6}
+        target={[0, 0.1, 0.4]}
+      />
+      <PerfProbe onStats={onStats} />
+    </Canvas>
+  )
+}

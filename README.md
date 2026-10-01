@@ -36,6 +36,7 @@ npm run deploy   # requires Cloudflare auth + wrangler
 - `/` home scaffold
 - `/apps`, `/apps/podcast-stripper`, `/apps/fixer-mixer`, `/apps/lil-leveler`
 - `/tools`, `/audio-live-sound/*`, `/guitar-building/*`
+- `/guitar-building/visualizer` — free in-browser 3D electric guitar spike (Three.js)
 - `/about`, `/buy`
 
 ## Pricing (Paddle sandbox, already created elsewhere)
