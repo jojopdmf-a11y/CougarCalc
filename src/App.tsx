@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { SiteFooter } from './components/SiteFooter'
 import { SiteHeader } from './components/SiteHeader'
@@ -8,8 +8,35 @@ import { AppsIndexPage } from './pages/AppsIndexPage'
 import { BuyPage } from './pages/BuyPage'
 import { BuySuccessPage } from './pages/BuySuccessPage'
 import { HomePage } from './pages/HomePage'
-import { ToolsStubPage } from './pages/ToolsStubPage'
+import { AUDIO_TOOL_PAGES } from './audioToolPages.ts'
+import { GUITAR_TOOL_PAGES } from './guitarToolPages.ts'
+import { AudioHubPage } from './pages/AudioHubPage.tsx'
+import { ComingSoonTool } from './pages/ComingSoonTool.tsx'
+import { GuitarHubPage } from './pages/GuitarHubPage.tsx'
+import { ToolsIndexPage } from './pages/ToolsIndexPage.tsx'
 import './styles/global.css'
+
+function AudioToolRoute() {
+  const { slug = '' } = useParams()
+  const Page = AUDIO_TOOL_PAGES[slug]
+  if (!Page) return <ComingSoonTool hubHref="/audio-live-sound/" hubLabel="Audio / live sound" />
+  return (
+    <Suspense fallback={<section className="stub"><h1>Loading calculator…</h1></section>}>
+      <Page />
+    </Suspense>
+  )
+}
+
+function GuitarToolRoute() {
+  const { slug = '' } = useParams()
+  const Page = GUITAR_TOOL_PAGES[slug]
+  if (!Page) return <ComingSoonTool hubHref="/guitar-building/" hubLabel="Guitar building" />
+  return (
+    <Suspense fallback={<section className="stub"><h1>Loading calculator…</h1></section>}>
+      <Page />
+    </Suspense>
+  )
+}
 
 const GuitarVisualizerPage = lazy(() =>
   import('./pages/GuitarVisualizerPage').then((m) => ({ default: m.GuitarVisualizerPage })),
@@ -57,48 +84,10 @@ export default function App() {
                 />
               }
             />
-            <Route
-              path="/tools"
-              element={
-                <ToolsStubPage
-                  title="Free tools"
-                  note="Indexes for audio/live sound and guitar building land here."
-                  links={[
-                    { to: '/guitar-building/visualizer', label: '3D guitar visualizer (spike)' },
-                    { to: '/guitar-building', label: 'Guitar building' },
-                    { to: '/audio-live-sound', label: 'Audio / live sound' },
-                  ]}
-                />
-              }
-            />
-            <Route
-              path="/audio-live-sound"
-              element={
-                <ToolsStubPage
-                  title="Audio / live sound"
-                  note="Route prefix locked. Calculators arrive when Calc pack is connected."
-                />
-              }
-            />
-            <Route
-              path="/audio-live-sound/*"
-              element={
-                <ToolsStubPage
-                  title="Audio tool"
-                  note="Individual calculator stub — waiting on Grokbot free-tools handoff."
-                />
-              }
-            />
-            <Route
-              path="/guitar-building"
-              element={
-                <ToolsStubPage
-                  title="Guitar building"
-                  note="Route prefix locked. Calculators arrive when Calc pack is connected. The 3D visualizer spike is live at /guitar-building/visualizer."
-                  links={[{ to: '/guitar-building/visualizer', label: '3D guitar visualizer (spike)' }]}
-                />
-              }
-            />
+            <Route path="/tools" element={<ToolsIndexPage />} />
+            <Route path="/audio-live-sound" element={<AudioHubPage />} />
+            <Route path="/audio-live-sound/:slug" element={<AudioToolRoute />} />
+            <Route path="/guitar-building" element={<GuitarHubPage />} />
             <Route
               path="/guitar-building/visualizer"
               element={
@@ -114,15 +103,7 @@ export default function App() {
                 </Suspense>
               }
             />
-            <Route
-              path="/guitar-building/*"
-              element={
-                <ToolsStubPage
-                  title="Guitar tool"
-                  note="Individual calculator stub — waiting on Grokbot free-tools handoff."
-                />
-              }
-            />
+            <Route path="/guitar-building/:slug" element={<GuitarToolRoute />} />
             <Route
               path="/about"
               element={
